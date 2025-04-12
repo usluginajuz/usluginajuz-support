@@ -3,19 +3,20 @@ import Logo from "@/components/Header/Logo";
 import { useTheme } from "@/context/ThemeProvider";
 import { ThemeColors } from "@/theme/colors";
 import { supabase } from "@/utils/supabase";
+import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import {
-    ActivityIndicator,
-    Alert,
-    KeyboardAvoidingView,
-    Platform,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View
+  ActivityIndicator,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
 } from "react-native";
 
 export default function ResetPasswordScreen() {
@@ -25,6 +26,7 @@ export default function ResetPasswordScreen() {
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [loading, setLoading] = useState(false);
+  const [resetSuccess, setResetSuccess] = useState(false);
 
   const handlePasswordReset = async () => {
     if (password !== confirm) {
@@ -34,13 +36,16 @@ export default function ResetPasswordScreen() {
     setLoading(true);
 
     const { error } = await supabase.auth.updateUser({ password });
-
+    
+    setLoading(false);
     if (error) {
       Alert.alert("Błąd", error.message);
     } else {
-      Alert.alert("Sukces", "Hasło zostało zmienione.");
+      setResetSuccess(true);
+      // Opcjonalnie możesz zresetować pola formularza:
+      setPassword("");
+      setConfirm("");
     }
-    setLoading(false);
   };
 
   return (
@@ -53,48 +58,55 @@ export default function ResetPasswordScreen() {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
         <StatusBar style="dark" />
-
-        {/* ScrollView – w stylu (zwykłym) ograniczamy TYLKO tło, ewentualne marginesy itp. */}
         <ScrollView
           style={{ backgroundColor: colors.background }}
-          // Tutaj układ dzieci (czyli formularza) – w contentContainerStyle
           contentContainerStyle={styles.contentContainer}
           keyboardShouldPersistTaps="handled"
           bounces={false}
         >
-          {/* Ten główny kontener "card"  */}
           <View style={styles.formContainer}>
-            <Text style={styles.title}>Ustaw nowe hasło</Text>
-            
-            <TextInput
-              placeholder="Nowe hasło"
-              secureTextEntry
-              style={styles.input}
-              value={password}
-              onChangeText={setPassword}
-              placeholderTextColor="#999"
-            />
-
-            <TextInput
-              placeholder="Powtórz hasło"
-              secureTextEntry
-              style={styles.input}
-              value={confirm}
-              onChangeText={setConfirm}
-              placeholderTextColor="#999"
-            />
-
-            <TouchableOpacity
-              style={styles.button}
-              onPress={handlePasswordReset}
-              disabled={loading}
-            >
-              {loading ? (
-                <ActivityIndicator color="#fff" />
-              ) : (
-                <Text style={styles.buttonText}>Zmień hasło</Text>
-              )}
-            </TouchableOpacity>
+            {resetSuccess ? (
+              <>
+                <Text style={styles.title}>Hasło zostało zmienione</Text>
+                <Text style={styles.text}>
+                  Teraz możesz wrócić do aplikacji i się zalogować.
+                </Text>
+                <TouchableOpacity onPress={() => router.replace("/")}>
+                  <Text style={styles.link}>Powrót do strony głównej</Text>
+                </TouchableOpacity>
+              </>
+            ) : (
+              <>
+                <Text style={styles.title}>Ustaw nowe hasło</Text>
+                <TextInput
+                  placeholder="Nowe hasło"
+                  secureTextEntry
+                  style={styles.input}
+                  value={password}
+                  onChangeText={setPassword}
+                  placeholderTextColor="#999"
+                />
+                <TextInput
+                  placeholder="Powtórz hasło"
+                  secureTextEntry
+                  style={styles.input}
+                  value={confirm}
+                  onChangeText={setConfirm}
+                  placeholderTextColor="#999"
+                />
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={handlePasswordReset}
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <ActivityIndicator color="#fff" />
+                  ) : (
+                    <Text style={styles.buttonText}>Zmień hasło</Text>
+                  )}
+                </TouchableOpacity>
+              </>
+            )}
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -104,23 +116,19 @@ export default function ResetPasswordScreen() {
 
 const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
-    // Tu ustawiamy układ dzieci w ScrollView: center w pionie, center w poziomie
     contentContainer: {
       flexGrow: 1,
-      justifyContent: "center", // wyśrodkowanie pionowe
-      alignItems: "center",      // wyśrodkowanie poziome
+      justifyContent: "center",
+      alignItems: "center",
       paddingHorizontal: 24,
       paddingVertical: 16,
-    },
-
-    // Ten kontener to "karta" / formularz – ma stałą maksymalną szerokość
-    // i jest środkiem, w którym wyświetlamy Inputy + przycisk
-    formContainer: {
-      width: "100%",        // zajmuje 100% z contentContainer
-      maxWidth: 600,        // ale nie więcej niż 600px na szerokich ekranach
       backgroundColor: colors.background,
     },
-
+    formContainer: {
+      width: "100%",
+      maxWidth: 600,
+      backgroundColor: colors.background,
+    },
     title: {
       fontSize: 24,
       fontWeight: "700",
@@ -128,8 +136,14 @@ const createStyles = (colors: ThemeColors) =>
       marginBottom: 32,
       textAlign: "center",
     },
+    text: {
+      fontSize: 16,
+      color: "#444",
+      textAlign: "center",
+      marginBottom: 20,
+    },
     input: {
-      width: "100%",        // wypełnia szerokość formContainer
+      width: "100%",
       backgroundColor: "#f1efed",
       padding: 14,
       borderRadius: 10,
@@ -138,7 +152,7 @@ const createStyles = (colors: ThemeColors) =>
       marginBottom: 16,
     },
     button: {
-      width: "100%",        // wypełnia szerokość formContainer
+      width: "100%",
       backgroundColor: colors.secondary,
       padding: 14,
       borderRadius: 10,
@@ -148,5 +162,12 @@ const createStyles = (colors: ThemeColors) =>
       color: "#fff",
       fontSize: 16,
       fontWeight: "600",
+    },
+    link: {
+      fontSize: 16,
+      fontWeight: "600",
+      color: colors.secondary,
+      textAlign: "center",
+      marginTop: 20,
     },
   });
