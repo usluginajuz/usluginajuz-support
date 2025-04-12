@@ -6,15 +6,17 @@ import { useEffect, useState } from "react";
 import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function EmailVerificationScreen() {
-  const { access_token, type } = useLocalSearchParams();
+  const { token, type } = useLocalSearchParams();
   const [status, setStatus] = useState<"loading" | "success" | "error">("loading");
 
   useEffect(() => {
     const verify = async () => {
-      if (typeof access_token === "string" && type === "signup") {
-        const { error } = await supabase.auth.exchangeCodeForSession(access_token);
+      if (typeof token === "string" && type === "signup") {
+        const { error } = await supabase.auth.exchangeCodeForSession(token);
         if (error) {
           setStatus("error");
+          console.log(error);
+          console.log(token);
         } else {
           setStatus("success");
         }
@@ -24,7 +26,7 @@ export default function EmailVerificationScreen() {
     };
 
     verify();
-  }, [access_token, type]);
+  }, [token, type]);
 
   return (
     <>
