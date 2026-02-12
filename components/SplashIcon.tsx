@@ -1,4 +1,4 @@
-import { Image, StyleSheet, useColorScheme, View } from 'react-native';
+import { Image, StyleSheet, useColorScheme, useWindowDimensions, View } from 'react-native';
 
 const splashLight = require('@/assets/images/splash-light.png');
 const splashDark = require('@/assets/images/splash-dark.png');
@@ -9,20 +9,27 @@ interface SplashIconProps {
 }
 
 /**
- * SplashIcon – wyświetla splash image dopasowany do aktualnego motywu
+ * SplashIcon – wyświetla splash image dopasowany do motywu i rozmiaru ekranu
  */
 const SplashIcon: React.FC<SplashIconProps> = ({
-  width = 220,
-  height = 220,
+  width = 800,
+  height = 450,
 }) => {
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
+  const { width: screenWidth } = useWindowDimensions();
+
+  // Na małych ekranach skaluj do 90% szerokości, zachowując proporcje
+  const maxWidth = Math.min(width, screenWidth * 0.9);
+  const scale = maxWidth / width;
+  const finalWidth = maxWidth;
+  const finalHeight = height * scale;
 
   return (
     <View style={styles.container}>
       <Image
         source={isDark ? splashDark : splashLight}
-        style={{ width, height }}
+        style={{ width: finalWidth, height: finalHeight }}
         resizeMode="contain"
       />
     </View>

@@ -10,7 +10,7 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const colorScheme = useColorScheme();
-  const colors = getColors(colorScheme === 'dark');
+  const colors = getColors(false); // narazie bez dark mode
 
   return (
     <ThemeContext.Provider value={{ colors }}>

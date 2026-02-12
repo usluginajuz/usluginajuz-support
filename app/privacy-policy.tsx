@@ -3,10 +3,10 @@ import Header from '@/components/Header';
 import Logo from '@/components/Logo';
 import { useTheme } from '@/theme/ThemeProvider';
 import { ThemeColors } from '@/theme/colors';
+import { CONTACT_EMAIL } from '@/utils/supabase';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { Linking, ScrollView, StyleSheet, Text, View } from 'react-native';
 
-const CONTACT_EMAIL = 'usluginajuz@gmail.com';
 const LAST_UPDATED = '12 lutego 2026';
 
 export default function PrivacyPolicyScreen() {

@@ -7,8 +7,6 @@ import { useTheme } from '@/theme/ThemeProvider';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
-const width = 800;
-const height = 450
 
 // ── Feature card data ──
 const features = [
@@ -227,7 +225,7 @@ export default function Index() {
       <ScrollView contentContainerStyle={styles.scrollContent}>
         {/* ── Hero ── */}
         <View style={styles.hero}>
-          <SplashIcon width={width} height={height} />
+          <SplashIcon/>
           <Text style={styles.heroSubtitle}>
             Rezerwuj usługi w sekundę — wszystko w jednym miejscu.
           </Text>
