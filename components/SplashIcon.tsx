@@ -1,4 +1,4 @@
-import { Image, StyleSheet, useWindowDimensions, View } from 'react-native';
+import { Image, Platform, StyleSheet, useWindowDimensions, View } from 'react-native';
 
 interface SplashIconProps {
   width?: number;
@@ -7,6 +7,8 @@ interface SplashIconProps {
 
 /**
  * SplashIcon – wyświetla splash image, skalowany responsywnie
+ * Na web używa natywnego <img> dla niezawodności
+ * Obraz musi być w folderze public/splash-light.png
  * TODO: dodać obsługę dark mode gdy będzie potrzebna
  */
 const SplashIcon: React.FC<SplashIconProps> = ({
@@ -20,10 +22,26 @@ const SplashIcon: React.FC<SplashIconProps> = ({
   const finalWidth = maxWidth;
   const finalHeight = height * scale;
 
+  if (Platform.OS === 'web') {
+    return (
+      <View style={styles.container}>
+        <img
+          src="/splash-light.png"
+          alt="Timelly"
+          style={{
+            width: finalWidth,
+            height: finalHeight,
+            objectFit: 'contain',
+          }}
+        />
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <Image
-        source={{ uri: '/splash-light.png' }}
+        source={require('@/assets/images/splash-light.png')}
         style={{ width: finalWidth, height: finalHeight }}
         resizeMode="contain"
       />
