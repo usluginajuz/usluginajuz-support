@@ -16,13 +16,13 @@ const DownloadButtons: React.FC = () => {
 
   const handleAppStore = () => {
     // TODO: Podmień na prawdziwy link
-    Linking.openURL('https://apps.apple.com/app/timelly');
+    Linking.openURL('https://apps.apple.com/pl/app/usluginajuz/id6752734347?l=pl');
   };
 
   const handleGooglePlay = () => {
     // TODO: Podmień na prawdziwy link
     Linking.openURL(
-      'https://play.google.com/store/apps/details?id=com.timelly'
+      'https://play.google.com/store/apps/details?id=com.usluginajuzowner.usluginajuz'
     );
   };
 
