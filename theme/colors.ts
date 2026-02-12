@@ -1,37 +1,38 @@
 /**
- * ThemeColors
- *
- * Struktura kolorów używana w całej aplikacji.
- * Można ją rozszerzyć o dodatkowe pola (np. `border`, `text`, `button`).
+ * 🎨 THEME COLORS - Auto mode only
+ * System wykrywa light/dark mode z przeglądarki
  */
+
 export type ThemeColors = {
   background: string;
+  backgroundSecondary: string;
   primary: string;
   secondary: string;
-  info: string;
+  text: string;
+  textSecondary: string;
+  border: string;
 };
-  
-/**
- * lightColors
- *
- * Domyślny zestaw kolorów aplikacji (jasny motyw).
- * - background: kolor tła
- * - primary: kolor akcentu (np. pomarańczowy)
- * - secondary: kolor kontrastowy (np. granatowy)
- */
+
 const lightColors: ThemeColors = {
-  background: '#e7e4e1',
-  primary: '#26354b',
-  secondary: '#e45e38',
-  info: '#666',
+  background: '#FFFFFF',
+  backgroundSecondary: '#F9FAFB',
+  primary: '#1b1b38',
+  secondary: '#6FA8D0',
+  text: '#111827',
+  textSecondary: '#6B7280',
+  border: '#E5E7EB',
 };
-  
-/**
- * getColors
- *
- * Funkcja zwracająca aktualny zestaw kolorów.
- * Obecnie zwraca tylko jasny motyw, ale może być rozwinięta
- * o obsługę dark mode lub personalizacji.
- */
-export const getColors = (): ThemeColors => lightColors;
-  
+
+const darkColors: ThemeColors = {
+  background: '#111827',
+  backgroundSecondary: '#1F2937',
+  primary: '#6FA8D0',
+  secondary: '#1b1b38',
+  text: '#F9FAFB',
+  textSecondary: '#9CA3AF',
+  border: '#374151',
+};
+
+export const getColors = (isDark: boolean): ThemeColors => {
+  return isDark ? darkColors : lightColors;
+};

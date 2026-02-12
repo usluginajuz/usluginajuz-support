@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "usluginajuz-support",
-    "slug": "usluginajuz-support",
-    "version": "1.0.0",
+    "name": "timelly.pl",
+    "slug": "timelly-support",
+    "version": "2.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -14,12 +14,14 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.usluginajuzowner.usluginajuzsupport"
     },
     "web": {
+      "name": "Timelly - rezerwuj rozrywkę i usługi",
+      "shortName": "Timelly",
       "bundler": "metro",
       "output": "static",
       "favicon": "./assets/images/favicon.png"
@@ -29,7 +31,7 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "image": "./assets/images/icon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
