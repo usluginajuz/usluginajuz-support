@@ -8,7 +8,7 @@ import { Image, StyleSheet, TouchableOpacity } from 'react-native';
 const Logo: React.FC = () => (
   <TouchableOpacity onPress={() => router.push('/')} activeOpacity={0.7}>
     <Image
-      source={require('@/assets/images/icon.png')}
+      source={{ uri: '/icon.png' }}
       style={styles.icon}
       resizeMode="contain"
     />

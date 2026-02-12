@@ -23,7 +23,7 @@ const SplashIcon: React.FC<SplashIconProps> = ({
   return (
     <View style={styles.container}>
       <Image
-        source={require('@/assets/images/splash-light.png')}
+        source={{ uri: '/splash-light.png' }}
         style={{ width: finalWidth, height: finalHeight }}
         resizeMode="contain"
       />
