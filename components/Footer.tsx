@@ -3,7 +3,7 @@ import { Link } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
 
 /**
- * Footer - linki do privacy policy i usuwania konta
+ * Footer - linki do privacy policy, usuwania konta i kontaktu
  */
 const Footer: React.FC = () => {
   const { colors } = useTheme();
@@ -50,6 +50,10 @@ const Footer: React.FC = () => {
         <Text style={styles.separator}>•</Text>
         <Link href="/delete-account" style={styles.link}>
           Usuń konto
+        </Link>
+        <Text style={styles.separator}>•</Text>
+        <Link href="/contact" style={styles.link}>
+          Kontakt
         </Link>
       </View>
       <Text style={styles.copyright}>
