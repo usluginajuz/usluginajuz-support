@@ -1,6 +1,5 @@
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
-import Logo from '@/components/Logo';
 import { useTheme } from '@/theme/ThemeProvider';
 import { ThemeColors } from '@/theme/colors';
 import { supabase } from '@/utils/supabase';
@@ -51,9 +50,7 @@ export default function EmailVerificationScreen() {
 
   return (
     <View style={styles.page}>
-      <Header>
-        <Logo />
-      </Header>
+      <Header />
 
       <View style={styles.centerWrap}>
         <View style={styles.card}>

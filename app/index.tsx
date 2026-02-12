@@ -1,12 +1,10 @@
 import DownloadButtons from '@/components/DownloadButtons';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
-import Logo from '@/components/Logo';
 import SplashIcon from '@/components/SplashIcon';
 import { useTheme } from '@/theme/ThemeProvider';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
-
+import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 // ── Feature card data ──
 const features = [
@@ -53,6 +51,30 @@ const audiences = [
       'Przyjmuj rezerwacje automatycznie',
       'Buduj bazę stałych klientów',
     ],
+  },
+];
+
+// ── About us data ──
+const aboutPoints = [
+  {
+    icon: 'location-dot' as const,
+    title: 'Białystok, Polska',
+    desc: 'Tworzymy Timelly w Białymstoku — wspieramy lokalne firmy i usługodawców.',
+  },
+  {
+    icon: 'users' as const,
+    title: 'Mały zespół, duże ambicje',
+    desc: 'Stoi za nami niewielki, ale zaangażowany zespół, który rozwija Timelly każdego dnia.',
+  },
+  {
+    icon: 'heart' as const,
+    title: 'Z pasji do rozwiązywania problemów',
+    desc: 'Timelly powstało z prostej potrzeby — umawianie wizyt powinno być łatwe i wygodne.',
+  },
+  {
+    icon: 'rocket' as const,
+    title: 'Ciągle się rozwijamy',
+    desc: 'Regularnie dodajemy nowe funkcje i usprawnienia — Twoja opinia pomaga nam rosnąć.',
   },
 ];
 
@@ -214,18 +236,73 @@ export default function Index() {
       lineHeight: 20,
       flex: 1,
     },
+
+    // ── About us ──
+    aboutGrid: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      justifyContent: 'center',
+      gap: 16,
+      maxWidth: 700,
+    },
+    aboutCard: {
+      backgroundColor: colors.backgroundSecondary,
+      borderRadius: 16,
+      padding: 24,
+      width: 300,
+      borderWidth: 1,
+      borderColor: colors.border,
+      alignItems: 'center',
+    },
+    aboutIconWrap: {
+      width: 52,
+      height: 52,
+      borderRadius: 16,
+      backgroundColor: colors.primary + '15',
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: 14,
+    },
+    aboutTitle: {
+      fontSize: 16,
+      fontWeight: '700',
+      color: colors.text,
+      textAlign: 'center',
+      marginBottom: 6,
+    },
+    aboutDesc: {
+      fontSize: 14,
+      color: colors.textSecondary,
+      textAlign: 'center',
+      lineHeight: 20,
+    },
+    flagRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: 8,
+      marginBottom: 8,
+    },
+    madeIn: {
+      fontSize: 14,
+      fontWeight: '600',
+      color: colors.textSecondary,
+    },
+    flagImage: {
+      width: 20,
+      height: 15,
+      borderRadius: 2,
+    },
   });
 
   return (
     <View style={styles.container}>
-      <Header>
-        <Logo />
-      </Header>
+      <Header />
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
         {/* ── Hero ── */}
         <View style={styles.hero}>
-          <SplashIcon/>
+          <SplashIcon />
           <Text style={styles.heroSubtitle}>
             Rezerwuj usługi w sekundę — wszystko w jednym miejscu.
           </Text>
@@ -291,6 +368,39 @@ export default function Index() {
             ))}
           </View>
         </View>
+
+        {/* ── O nas ── */}
+        <View style={[styles.section, styles.sectionAlt]}>
+          <View style={styles.flagRow}>
+            <Image
+              source={{ uri: `https://flagcdn.com/w40/pl.png` }}
+              style={styles.flagImage}
+            />
+            <Text style={styles.madeIn}>Made in Białystok</Text>
+          </View>
+          <Text style={styles.sectionTitle}>O nas</Text>
+          <Text style={styles.sectionSubtitle}>
+            Timelly to projekt stworzony w Białymstoku przez mały zespół,
+            który wierzy, że rezerwacja usług powinna być prosta jak
+            wysłanie wiadomości.
+          </Text>
+          <View style={styles.aboutGrid}>
+            {aboutPoints.map((item) => (
+              <View key={item.icon} style={styles.aboutCard}>
+                <View style={styles.aboutIconWrap}>
+                  <FontAwesome6
+                    name={item.icon}
+                    size={22}
+                    color={colors.primary}
+                  />
+                </View>
+                <Text style={styles.aboutTitle}>{item.title}</Text>
+                <Text style={styles.aboutDesc}>{item.desc}</Text>
+              </View>
+            ))}
+          </View>
+        </View>
+
         <View style={{ width: '100%' }}>
           <Footer />
         </View>

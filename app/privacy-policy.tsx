@@ -1,6 +1,5 @@
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
-import Logo from '@/components/Logo';
 import { useTheme } from '@/theme/ThemeProvider';
 import { ThemeColors } from '@/theme/colors';
 import { CONTACT_EMAIL } from '@/utils/supabase';
@@ -24,9 +23,7 @@ export default function PrivacyPolicyScreen() {
 
   return (
     <View style={styles.page}>
-      <Header>
-        <Logo />
-      </Header>
+      <Header />
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
         {/* ── Page header ── */}
