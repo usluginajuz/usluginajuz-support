@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Image, Platform, StyleSheet, useWindowDimensions, View } from 'react-native';
 
 interface SplashIconProps {
@@ -5,19 +6,18 @@ interface SplashIconProps {
   height?: number;
 }
 
-/**
- * SplashIcon – wyświetla splash image, skalowany responsywnie
- * Na web używa natywnego <img> dla niezawodności
- * Obraz musi być w folderze public/splash-light.png
- * TODO: dodać obsługę dark mode gdy będzie potrzebna
- */
 const SplashIcon: React.FC<SplashIconProps> = ({
   width = 800,
   height = 450,
 }) => {
   const { width: screenWidth } = useWindowDimensions();
+  const [mounted, setMounted] = useState(false);
 
-  const maxWidth = Math.min(width, screenWidth * 0.9);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const maxWidth = Math.min(width, mounted ? screenWidth * 0.9 : width);
   const scale = maxWidth / width;
   const finalWidth = maxWidth;
   const finalHeight = height * scale;
@@ -48,7 +48,6 @@ const SplashIcon: React.FC<SplashIconProps> = ({
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
