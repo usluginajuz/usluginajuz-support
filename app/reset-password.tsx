@@ -3,9 +3,10 @@ import Header from '@/components/Header';
 import { useTheme } from '@/theme/ThemeProvider';
 import { ThemeColors } from '@/theme/colors';
 import { supabase } from '@/utils/supabase';
+import { EmailOtpType } from '@supabase/supabase-js';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import { router } from 'expo-router';
-import React, { useState } from 'react';
+import { router, useLocalSearchParams } from 'expo-router';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -20,13 +21,49 @@ import {
 export default function ResetPasswordScreen() {
   const { colors } = useTheme();
   const styles = createStyles(colors);
+  const { token_hash, type } = useLocalSearchParams();
 
+  const [sessionReady, setSessionReady] = useState(false);
+  const [sessionError, setSessionError] = useState('');
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
   const [loading, setLoading] = useState(false);
   const [resetSuccess, setResetSuccess] = useState(false);
+  const didRun = useRef(false);
+
+  // First: verify the token from the email to establish a session
+  useEffect(() => {
+    if (didRun.current) return;
+    didRun.current = true;
+
+    if (typeof token_hash === 'string' && typeof type === 'string') {
+      supabase.auth.verifyOtp({
+        token_hash,
+        type: type as EmailOtpType,
+      }).then(({ error }) => {
+        if (error) {
+          setSessionError(error.message);
+        } else {
+          setSessionReady(true);
+        }
+      });
+    } else {
+      // Fallback: check if session exists from hash fragment (implicit flow)
+      supabase.auth.getSession().then(({ data }) => {
+        if (data.session) {
+          setSessionReady(true);
+        } else {
+          setSessionError('Nieprawidłowy lub wygasły link do resetowania hasła.');
+        }
+      });
+    }
+  }, [token_hash, type]);
 
   const handlePasswordReset = async () => {
+    if (password.length < 6) {
+      Alert.alert('Za krótkie hasło', 'Hasło musi mieć co najmniej 6 znaków.');
+      return;
+    }
     if (password !== confirm) {
       Alert.alert('Hasła się nie zgadzają');
       return;
@@ -37,7 +74,7 @@ export default function ResetPasswordScreen() {
 
     setLoading(false);
     if (error) {
-      Alert.alert('Błąd', error.message);
+      Alert.alert('Coś poszło nie tak', error.message);
     } else {
       setResetSuccess(true);
       setPassword('');
@@ -54,7 +91,33 @@ export default function ResetPasswordScreen() {
         keyboardShouldPersistTaps="handled"
       >
         <View style={styles.card}>
-          {resetSuccess ? (
+          {sessionError ? (
+            <>
+              <View style={[styles.iconCircle, { backgroundColor: colors.secondary + '15' }]}>
+                <FontAwesome6 name="circle-xmark" size={28} color={colors.secondary} solid />
+              </View>
+              <Text style={styles.title}>Link wygasł</Text>
+              <Text style={[styles.subtitle, { color: colors.secondary }]}>{sessionError}</Text>
+              <Text style={styles.subtitle}>
+                Poproś o nowy link do resetowania hasła w aplikacji.
+              </Text>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => router.replace('/')}
+                activeOpacity={0.8}
+              >
+                <Text style={styles.buttonText}>Powrót do strony głównej</Text>
+              </TouchableOpacity>
+            </>
+          ) : !sessionReady ? (
+            <>
+              <View style={styles.iconCircle}>
+                <ActivityIndicator size="large" color={colors.primary} />
+              </View>
+              <Text style={styles.title}>Przygotowywanie...</Text>
+              <Text style={styles.subtitle}>Trwa weryfikacja linku.</Text>
+            </>
+          ) : resetSuccess ? (
             <>
               <View style={[styles.iconCircle, styles.iconCircleSuccess]}>
                 <FontAwesome6 name="check" size={28} color={colors.primary} />

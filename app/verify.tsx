@@ -3,9 +3,10 @@ import Header from '@/components/Header';
 import { useTheme } from '@/theme/ThemeProvider';
 import { ThemeColors } from '@/theme/colors';
 import { supabase } from '@/utils/supabase';
+import { EmailOtpType } from '@supabase/supabase-js';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { router, useLocalSearchParams } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   StyleSheet,
@@ -18,35 +19,43 @@ export default function EmailVerificationScreen() {
   const { colors } = useTheme();
   const styles = createStyles(colors);
 
-  const { token, type } = useLocalSearchParams();
-  const [status, setStatus] = useState<'loading' | 'success' | 'error'>(
-    'loading'
-  );
+  const { token_hash, type } = useLocalSearchParams();
+  const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
   const [errorMessage, setErrorMessage] = useState('');
+  const didRun = useRef(false);
 
   useEffect(() => {
+    if (didRun.current) return;
+    didRun.current = true;
+
+    // Check hash fragment for errors (Supabase implicit flow redirect)
     const hashParams = new URLSearchParams(window.location.hash.slice(1));
-    const errorFromHash = hashParams.get('error');
-    const errorDescription = hashParams.get('error_description');
+    const errorFromHash = hashParams.get('error_description') || hashParams.get('error');
 
     if (errorFromHash) {
-      setErrorMessage(errorDescription || 'Wystąpił błąd podczas weryfikacji.');
+      setErrorMessage(errorFromHash);
       setStatus('error');
-    } else if (typeof token === 'string' && type === 'signup') {
-      const verify = async () => {
-        const { error } = await supabase.auth.exchangeCodeForSession(token);
+      return;
+    }
+
+    // Verify using token_hash from email template
+    if (typeof token_hash === 'string' && typeof type === 'string') {
+      supabase.auth.verifyOtp({
+        token_hash,
+        type: type as EmailOtpType,
+      }).then(({ error }) => {
         if (error) {
           setErrorMessage(error.message);
           setStatus('error');
         } else {
           setStatus('success');
         }
-      };
-      verify();
+      });
     } else {
-      setStatus('success');
+      setErrorMessage('Nieprawidłowy link weryfikacyjny.');
+      setStatus('error');
     }
-  }, [token, type]);
+  }, [token_hash, type]);
 
   return (
     <View style={styles.page}>

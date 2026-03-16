@@ -5,4 +5,4 @@ const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY!;
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-export const CONTACT_EMAIL = 'usluginajuz@gmail.com';
+export const CONTACT_EMAIL = 'support@timelly.pl';
