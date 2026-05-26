@@ -392,25 +392,37 @@ export default function PrivacyPolicyScreen() {
           <NumberedList
             items={[
               {
-                title: 'Zgoda (art. 6 ust. 1 lit. a RODO)',
-                desc: 'Publikacja imienia i punktów odbywa się wyłącznie po wyrażeniu przez Ciebie wyraźnej, dobrowolnej zgody w aplikacji (modal przy pierwszym wejściu w sekcję rankingu).',
+                title: 'Zgoda na uczestnictwo w rankingu (art. 6 ust. 1 lit. a RODO)',
+                desc: 'Wyświetlanie Twojej pozycji, punktów i ligi w miesięcznym rankingu — w trybie z cenzurą (M*****z, bez avatara) lub pełnym (imię + avatar) — odbywa się wyłącznie po wyrażeniu przez Ciebie zgody w aplikacji przy pierwszym wejściu w sekcję rankingu.',
               },
-                {
+              {
                 title: 'Zgoda na rozpowszechnianie wizerunku (art. 81 ust. 1 Prawa autorskiego)',
-                desc: 'Pokazanie Twojego zdjęcia profilowego innym użytkownikom wymaga odrębnej, świadomej zgody na rozpowszechnianie wizerunku. Akceptacja regulaminu rankingu obejmuje również tę zgodę.',
+                desc: 'Pokazanie Twojego zdjęcia profilowego innym użytkownikom (tylko tryb pełny) wymaga odrębnej, świadomej zgody na rozpowszechnianie wizerunku. Wybierając „Pełne imię + avatar" w aplikacji potwierdzasz tę zgodę. W trybie z cenzurą zdjęcie nie jest pokazywane i ta zgoda nie jest wymagana.',
               },
             ]}
             colors={colors}
             styles={styles}
           />
 
-          <Text style={styles.subheading}>Tryb anonimowy i wycofanie zgody</Text>
+          <Text style={styles.subheading}>Dwa tryby widoczności (Twój wybór)</Text>
           <BulletList
             items={[
-              'W każdej chwili możesz włączyć tryb anonimowy w Profil → Ustawienia → „Ranking i prywatność" lub bezpośrednio z ekranu rankingu. Wtedy Twoje imię jest maskowane (np. „M*****z"), a zdjęcie profilowe nie jest pokazywane innym użytkownikom.',
-              'Możesz w każdej chwili wycofać zgodę — wystarczy przełączyć opcję „Pokaż mnie w rankingu" na wyłączoną. Wycofanie zgody nie wpływa na zgodność z prawem przetwarzania, którego dokonano przed jej wycofaniem.',
-              'Niezależnie od trybu anonimowego, swoją własną pozycję w rankingu zawsze widzisz w postaci nieanonimizowanej (po Twojej stronie).',
-              'Administrator zastrzega sobie prawo do całkowitego usunięcia profilu z rankingu w przypadku naruszenia regulaminu lub na uzasadniony wniosek użytkownika.',
+              'Tryb pełny — inni widzą Twoje imię (pierwszy człon nazwy użytkownika) oraz Twoje zdjęcie profilowe. Ten tryb wymaga osobnej zgody na rozpowszechnianie wizerunku (art. 81 ust. 1 Prawa autorskiego).',
+              'Tryb z cenzurą (domyślny dla nowych użytkowników) — inni widzą Cię z maskowanym imieniem (np. „M*****z") oraz bez zdjęcia profilowego. Pozostajesz w rankingu, ale Twoje dane osobowe nie są pokazywane. Wystarczy do tego ogólna zgoda na uczestnictwo w rankingu.',
+              'Tryb możesz zmienić w każdej chwili: Profil → toggle „Pokaż mnie w rankingu" lub Profil → Ustawienia → „Ranking i prywatność". Zmiana zaczyna obowiązywać od razu.',
+              'Niezależnie od trybu, swoją własną pozycję w rankingu zawsze widzisz w postaci pełnej (po Twojej stronie aplikacji).',
+            ]}
+            color={colors.textSecondary}
+            styles={styles}
+          />
+
+          <Text style={styles.subheading}>Wycofanie zgody i pełne usunięcie z rankingu</Text>
+          <BulletList
+            items={[
+              'Wycofanie zgody na publikację pełnych danych = przejście w tryb z cenzurą. Twoje imię i zdjęcie przestają być pokazywane innym, ale Twoje punkty nadal liczą się w rankingu (jako anonimowy wpis).',
+              'Pełne usunięcie profilu z rankingu (zniknięcie z listy) wymaga wniosku do Administratora pod adresem support@timelly.pl — usuwamy bez zbędnej zwłoki.',
+              'Administrator zastrzega sobie prawo do całkowitego usunięcia profilu z rankingu w przypadku naruszenia regulaminu (np. nadużycia punktowego).',
+              'Wycofanie zgody nie wpływa na zgodność z prawem przetwarzania, którego dokonano przed jej wycofaniem.',
             ]}
             color={colors.textSecondary}
             styles={styles}
