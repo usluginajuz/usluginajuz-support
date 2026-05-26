@@ -6,7 +6,7 @@ import { CONTACT_EMAIL } from '@/utils/supabase';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { Linking, ScrollView, StyleSheet, Text, View } from 'react-native';
 
-const LAST_UPDATED = '12 lutego 2026';
+const LAST_UPDATED = '26 maja 2026';
 
 export default function PrivacyPolicyScreen() {
   const { colors } = useTheme();
@@ -360,11 +360,78 @@ export default function PrivacyPolicyScreen() {
           </Text>
         </View>
 
-        {/* ── 12. Kontakt ── */}
+        {/* ── 12. Ranking i widoczność profilu ── */}
+        <View style={styles.card} nativeID="ranking">
+          <SectionHeader
+            icon="trophy"
+            title="12. Ranking i widoczność profilu"
+            colors={colors}
+            styles={styles}
+          />
+          <Text style={styles.text}>
+            Aplikacja Timelly udostępnia opcjonalny miesięczny ranking
+            użytkowników bazujący na punktach zdobywanych za zrealizowane
+            wizyty. Sekcja opisuje jakie dane są publikowane i na jakiej
+            podstawie prawnej.
+          </Text>
+
+          <Text style={styles.subheading}>Jakie dane pokazujemy innym</Text>
+          <BulletList
+            items={[
+              'Twoje imię (pierwszy człon pola „nazwa użytkownika") — np. „Mateusz".',
+              'Twoje zdjęcie profilowe (jeśli zostało dodane).',
+              'Liczbę punktów zdobytych w bieżącym miesiącu kalendarzowym.',
+              'Twoją ligę (Brąz, Srebro, Złoto, Platyna, Diament — wyliczana z punktów).',
+              'Twoją pozycję w rankingu miesięcznym.',
+            ]}
+            color={colors.primary}
+            styles={styles}
+          />
+
+          <Text style={styles.subheading}>Podstawa prawna</Text>
+          <NumberedList
+            items={[
+              {
+                title: 'Zgoda (art. 6 ust. 1 lit. a RODO)',
+                desc: 'Publikacja imienia i punktów odbywa się wyłącznie po wyrażeniu przez Ciebie wyraźnej, dobrowolnej zgody w aplikacji (modal przy pierwszym wejściu w sekcję rankingu).',
+              },
+                {
+                title: 'Zgoda na rozpowszechnianie wizerunku (art. 81 ust. 1 Prawa autorskiego)',
+                desc: 'Pokazanie Twojego zdjęcia profilowego innym użytkownikom wymaga odrębnej, świadomej zgody na rozpowszechnianie wizerunku. Akceptacja regulaminu rankingu obejmuje również tę zgodę.',
+              },
+            ]}
+            colors={colors}
+            styles={styles}
+          />
+
+          <Text style={styles.subheading}>Tryb anonimowy i wycofanie zgody</Text>
+          <BulletList
+            items={[
+              'W każdej chwili możesz włączyć tryb anonimowy w Profil → Ustawienia → „Ranking i prywatność" lub bezpośrednio z ekranu rankingu. Wtedy Twoje imię jest maskowane (np. „M*****z"), a zdjęcie profilowe nie jest pokazywane innym użytkownikom.',
+              'Możesz w każdej chwili wycofać zgodę — wystarczy przełączyć opcję „Pokaż mnie w rankingu" na wyłączoną. Wycofanie zgody nie wpływa na zgodność z prawem przetwarzania, którego dokonano przed jej wycofaniem.',
+              'Niezależnie od trybu anonimowego, swoją własną pozycję w rankingu zawsze widzisz w postaci nieanonimizowanej (po Twojej stronie).',
+              'Administrator zastrzega sobie prawo do całkowitego usunięcia profilu z rankingu w przypadku naruszenia regulaminu lub na uzasadniony wniosek użytkownika.',
+            ]}
+            color={colors.textSecondary}
+            styles={styles}
+          />
+
+          <View style={styles.noteBox}>
+            <FontAwesome6 name="circle-info" size={14} color={colors.primary} style={{ marginTop: 2 }} />
+            <Text style={styles.noteText}>
+              Ranking nie jest widoczny dla osób trzecich spoza aplikacji
+              Timelly — widzą go wyłącznie inni zalogowani użytkownicy. Dane
+              rankingu nie są udostępniane firmom prowadzącym profile w
+              Timelly ani podmiotom zewnętrznym.
+            </Text>
+          </View>
+        </View>
+
+        {/* ── 13. Kontakt ── */}
         <View style={styles.card}>
           <SectionHeader
             icon="headset"
-            title="12. Kontakt"
+            title="13. Kontakt"
             colors={colors}
             styles={styles}
           />
