@@ -17,10 +17,12 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^14.0.2",
+    "@opentelemetry/api": "^1.9.0",
     "@react-navigation/bottom-tabs": "^7.2.0",
     "@react-navigation/native": "^7.0.14",
     "@supabase/supabase-js": "^2.49.4",
     "expo": "~52.0.43",
+    "expo-asset": "~11.0.5",
     "expo-blur": "~14.0.3",
     "expo-constants": "~17.0.8",
     "expo-dev-client": "~5.0.19",
