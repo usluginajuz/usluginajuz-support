@@ -6,7 +6,7 @@ import { CONTACT_EMAIL } from '@/utils/supabase';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { Linking, ScrollView, StyleSheet, Text, View } from 'react-native';
 
-const LAST_UPDATED = '26 maja 2026';
+const LAST_UPDATED = '1 lipca 2026';
 
 export default function PrivacyPolicyScreen() {
   const { colors } = useTheme();
@@ -110,8 +110,10 @@ export default function PrivacyPolicyScreen() {
           <BulletList
             items={[
               'Data ostatniego logowania do aplikacji',
+              'Dzienne wejścia do aplikacji (data i platforma) — wyłącznie dla zalogowanych użytkowników; nie stosujemy trwałych identyfikatorów urządzenia',
               'Licznik uruchomień aplikacji (w celu wykrywania nieaktywnych kont)',
               'Tokeny push notification (do wysyłania powiadomień)',
+              'Zapisy nieudanych prób logowania (np. blokady PIN) — w celach bezpieczeństwa',
             ]}
             color={colors.primary}
             styles={styles}
@@ -121,6 +123,46 @@ export default function PrivacyPolicyScreen() {
           <BulletList
             items={[
               'Ocena (1–5) i komentarz tekstowy wystawiony firmie',
+            ]}
+            color={colors.primary}
+            styles={styles}
+          />
+
+          <Text style={styles.subheading}>Klienci tymczasowi (rezerwacje bez konta)</Text>
+          <BulletList
+            items={[
+              'Imię, numer telefonu i notatki osoby bez konta, którą firma dodaje do rezerwacji w swoim imieniu',
+            ]}
+            color={colors.primary}
+            styles={styles}
+          />
+
+          <Text style={styles.subheading}>Aktywność i preferencje</Text>
+          <BulletList
+            items={[
+              'Ulubione firmy',
+              'Zapisy na wydarzenia oraz listy oczekujących (na co i kiedy się zapisałeś)',
+              'Historia punktów i ewentualnego salda (rejestr naliczeń za zrealizowane wizyty)',
+            ]}
+            color={colors.primary}
+            styles={styles}
+          />
+
+          <Text style={styles.subheading}>Komunikacja i wnioski</Text>
+          <BulletList
+            items={[
+              'Treść i metadane wysłanych powiadomień push i SMS (np. treść przypomnienia o wizycie, numer telefonu odbiorcy)',
+              'Treść wiadomości z formularza kontaktu wraz z numerem telefonu (jeśli podany)',
+              'Dane wniosku o założenie profilu firmy: proponowana nazwa, opis i numer telefonu kontaktowy',
+            ]}
+            color={colors.primary}
+            styles={styles}
+          />
+
+          <Text style={styles.subheading}>Zgody</Text>
+          <BulletList
+            items={[
+              'Rejestr akceptacji dokumentów (regulamin, polityka prywatności): typ dokumentu, wersja, data, platforma oraz wersja aplikacji — jako dowód spełnienia obowiązków prawnych',
             ]}
             color={colors.primary}
             styles={styles}
@@ -143,7 +185,11 @@ export default function PrivacyPolicyScreen() {
               },
               {
                 title: 'Utrzymanie bezpieczeństwa',
-                desc: 'Monitorowanie aktywności konta, wykrywanie nadużyć — na podstawie prawnie uzasadnionego interesu Administratora (art. 6 ust. 1 lit. f RODO).',
+                desc: 'Monitorowanie aktywności konta, wykrywanie nadużyć oraz ograniczanie liczby nieudanych prób logowania (np. blokady PIN) — na podstawie prawnie uzasadnionego interesu Administratora (art. 6 ust. 1 lit. f RODO).',
+              },
+              {
+                title: 'Funkcje grywalizacyjne (ranking i punkty)',
+                desc: 'Naliczanie punktów za zrealizowane wizyty oraz prowadzenie miesięcznego rankingu w trybie ograniczonym — na podstawie prawnie uzasadnionego interesu Administratora (art. 6 ust. 1 lit. f RODO), z prawem sprzeciwu. Tryb pełny (imię i zdjęcie) — na podstawie zgody (art. 81 Prawa autorskiego).',
               },
               {
                 title: 'Wyświetlanie lokalizacji firm',
@@ -151,7 +197,11 @@ export default function PrivacyPolicyScreen() {
               },
               {
                 title: 'Komunikacja',
-                desc: 'Odpowiadanie na zapytania i obsługa wniosków o usunięcie konta — na podstawie prawnie uzasadnionego interesu (art. 6 ust. 1 lit. f RODO).',
+                desc: 'Odpowiadanie na zapytania, obsługa wiadomości z formularza kontaktu, wniosków o założenie profilu firmy oraz wniosków o usunięcie konta — na podstawie prawnie uzasadnionego interesu (art. 6 ust. 1 lit. f RODO).',
+              },
+              {
+                title: 'Dokumentowanie zgód',
+                desc: 'Przechowywanie rejestru akceptacji regulaminu i polityki prywatności (kto, którą wersję i kiedy zaakceptował) — w celu wykazania zgodności, na podstawie obowiązku prawnego oraz prawnie uzasadnionego interesu (art. 6 ust. 1 lit. c i f RODO).',
               },
             ]}
             colors={colors}
@@ -369,10 +419,11 @@ export default function PrivacyPolicyScreen() {
             styles={styles}
           />
           <Text style={styles.text}>
-            Aplikacja Timelly udostępnia opcjonalny miesięczny ranking
-            użytkowników bazujący na punktach zdobywanych za zrealizowane
-            wizyty. Sekcja opisuje jakie dane są publikowane i na jakiej
-            podstawie prawnej.
+            Aplikacja Timelly prowadzi miesięczny ranking użytkowników bazujący na
+            punktach zdobywanych za zrealizowane wizyty. Udział jest domyślny i odbywa
+            się w trybie ograniczonym (z maskowaniem imienia i bez zdjęcia), z prawem
+            sprzeciwu. Sekcja opisuje, jakie dane są publikowane i na jakiej podstawie
+            prawnej.
           </Text>
 
           <Text style={styles.subheading}>Jakie dane pokazujemy innym</Text>
@@ -392,12 +443,12 @@ export default function PrivacyPolicyScreen() {
           <NumberedList
             items={[
               {
-                title: 'Zgoda na uczestnictwo w rankingu (art. 6 ust. 1 lit. a RODO)',
-                desc: 'Wyświetlanie Twojej pozycji, punktów i ligi w miesięcznym rankingu — w trybie z cenzurą (M*****z, bez avatara) lub pełnym (imię + avatar) — odbywa się wyłącznie po wyrażeniu przez Ciebie zgody w aplikacji przy pierwszym wejściu w sekcję rankingu.',
+                title: 'Uczestnictwo w rankingu — prawnie uzasadniony interes (art. 6 ust. 1 lit. f RODO)',
+                desc: 'Wyświetlanie Twojej pozycji, punktów i ligi w miesięcznym rankingu w trybie ograniczonym (zamaskowane imię „M*****z", bez zdjęcia) opiera się na prawnie uzasadnionym interesie Administratora, jakim jest prowadzenie funkcji grywalizacyjnej. Przysługuje Ci prawo sprzeciwu (art. 21 RODO) — realizujesz je wyłączając swoją widoczność w aplikacji lub wnioskując o usunięcie z rankingu.',
               },
               {
-                title: 'Zgoda na rozpowszechnianie wizerunku (art. 81 ust. 1 Prawa autorskiego)',
-                desc: 'Pokazanie Twojego zdjęcia profilowego innym użytkownikom (tylko tryb pełny) wymaga odrębnej, świadomej zgody na rozpowszechnianie wizerunku. Wybierając „Pełne imię + avatar" w aplikacji potwierdzasz tę zgodę. W trybie z cenzurą zdjęcie nie jest pokazywane i ta zgoda nie jest wymagana.',
+                title: 'Tryb pełny — zgoda na rozpowszechnianie wizerunku (art. 81 ust. 1 Prawa autorskiego)',
+                desc: 'Pokazanie innym użytkownikom Twojego imienia i zdjęcia profilowego (tylko tryb pełny) odbywa się na podstawie Twojej zgody na rozpowszechnianie wizerunku. Udzielasz jej, wybierając w aplikacji tryb „Pełne imię + zdjęcie", i możesz ją w każdej chwili wycofać, wracając do trybu ograniczonego. W trybie ograniczonym zdjęcie nie jest pokazywane i ta zgoda nie jest wymagana.',
               },
             ]}
             colors={colors}
@@ -408,7 +459,7 @@ export default function PrivacyPolicyScreen() {
           <BulletList
             items={[
               'Tryb pełny — inni widzą Twoje imię (pierwszy człon nazwy użytkownika) oraz Twoje zdjęcie profilowe. Ten tryb wymaga osobnej zgody na rozpowszechnianie wizerunku (art. 81 ust. 1 Prawa autorskiego).',
-              'Tryb z cenzurą (domyślny dla nowych użytkowników) — inni widzą Cię z maskowanym imieniem (np. „M*****z") oraz bez zdjęcia profilowego. Pozostajesz w rankingu, ale Twoje dane osobowe nie są pokazywane. Wystarczy do tego ogólna zgoda na uczestnictwo w rankingu.',
+              'Tryb ograniczony (domyślny) — inni widzą Cię z maskowanym imieniem (np. „M*****z") oraz bez zdjęcia profilowego. Pozostajesz w rankingu, ale Twoje dane osobowe nie są pokazywane. Podstawą udziału w tym trybie jest prawnie uzasadniony interes (art. 6 ust. 1 lit. f RODO).',
               'Tryb możesz zmienić w każdej chwili: Profil → toggle „Pokaż mnie w rankingu" lub Profil → Ustawienia → „Ranking i prywatność". Zmiana zaczyna obowiązywać od razu.',
               'Niezależnie od trybu, swoją własną pozycję w rankingu zawsze widzisz w postaci pełnej (po Twojej stronie aplikacji).',
             ]}
@@ -416,13 +467,13 @@ export default function PrivacyPolicyScreen() {
             styles={styles}
           />
 
-          <Text style={styles.subheading}>Wycofanie zgody i pełne usunięcie z rankingu</Text>
+          <Text style={styles.subheading}>Sprzeciw, wycofanie zgody i usunięcie z rankingu</Text>
           <BulletList
             items={[
-              'Wycofanie zgody na publikację pełnych danych = przejście w tryb z cenzurą. Twoje imię i zdjęcie przestają być pokazywane innym, ale Twoje punkty nadal liczą się w rankingu (jako anonimowy wpis).',
-              'Pełne usunięcie profilu z rankingu (zniknięcie z listy) wymaga wniosku do Administratora pod adresem support@timelly.pl — usuwamy bez zbędnej zwłoki.',
+              'Powrót z trybu pełnego do trybu ograniczonego = wycofanie zgody na publikację imienia i zdjęcia. Przestają być one pokazywane innym, ale Twoje punkty nadal liczą się w rankingu (jako wpis zanonimizowany).',
+              'Sprzeciw wobec udziału w rankingu (art. 21 RODO) realizujesz wyłączając swoją widoczność w aplikacji albo wnioskując o całkowite usunięcie z rankingu pod adresem support@timelly.pl — usuwamy bez zbędnej zwłoki.',
               'Administrator zastrzega sobie prawo do całkowitego usunięcia profilu z rankingu w przypadku naruszenia regulaminu (np. nadużycia punktowego).',
-              'Wycofanie zgody nie wpływa na zgodność z prawem przetwarzania, którego dokonano przed jej wycofaniem.',
+              'Wycofanie zgody na rozpowszechnianie wizerunku nie wpływa na zgodność z prawem przetwarzania, którego dokonano przed jej wycofaniem.',
             ]}
             color={colors.textSecondary}
             styles={styles}

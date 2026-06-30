@@ -48,6 +48,10 @@ const Footer: React.FC = () => {
           Polityka Prywatności
         </Link>
         <Text style={styles.separator}>•</Text>
+        <Link href="/terms" style={styles.link}>
+          Regulamin
+        </Link>
+        <Text style={styles.separator}>•</Text>
         <Link href="/delete-account" style={styles.link}>
           Usuń konto
         </Link>
