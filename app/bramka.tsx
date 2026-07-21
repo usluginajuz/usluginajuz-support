@@ -106,6 +106,9 @@ export default function BramkaScreen() {
             zgodność z umową z operatorem odpowiada firma.{'\n'}
             • Numery dzwoniących klientów przechowujemy maksymalnie 7 dni i służą wyłącznie
             podpowiedzi przy umawianiu wizyty.{'\n'}
+            • Android nie przekazuje aplikacjom połączeń od numerów zapisanych w kontaktach
+            telefonu. Wykrywanie działa więc dla numerów spoza kontaktów, czyli głównie dla
+            nowych klientów. To ograniczenie systemu, nie aplikacji.{'\n'}
             • Telefon możesz odłączyć w każdej chwili: w aplikacji Timelly Bramka albo
             w Ustawieniach SMS w Timelly.
           </Text>
