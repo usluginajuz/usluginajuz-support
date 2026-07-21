@@ -37,7 +37,7 @@ const steps = [
     icon: 'battery-full' as const,
     title: 'Wyłącz optymalizację baterii',
     description:
-      'Aplikacja poprosi o wyłączenie optymalizacji baterii. Bez tego system może usypiać bramkę i opóźniać wysyłkę. Na telefonach Xiaomi, Huawei i Oppo włącz dodatkowo Autostart i przypnij aplikację na liście ostatnich aplikacji.',
+      'Aplikacja poprosi o wyłączenie optymalizacji baterii. Bez tego system może usypiać bramkę i opóźniać wysyłkę. Na telefonach Xiaomi, Huawei i Oppo włącz dodatkowo Autostart i przypnij aplikację na liście ostatnich aplikacji. W Ustawienia → Aplikacje → Timelly Bramka wyłącz też „Wstrzymuj aktywność w aplikacji, jeśli jest nieużywana" — inaczej Android po kilku miesiącach sam zabierze uprawnienia aplikacji, której nikt nie otwiera.',
   },
 ];
 
