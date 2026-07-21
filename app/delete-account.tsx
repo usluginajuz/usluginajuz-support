@@ -4,6 +4,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { ThemeColors } from '@/theme/colors';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { CONTACT_EMAIL } from '@/utils/supabase';
 
 // ── Section data ──
 
@@ -26,8 +27,6 @@ const timelineSteps = [
   { label: 'Usunięcie danych operacyjnych', value: 'do 14 dni od potwierdzenia' },
   { label: 'Pełne usunięcie z kopii zapasowych', value: 'do 30 dni (cykl retencji)' },
 ];
-
-const CONTACT_EMAIL = 'usluginajuz@gmail.com';
 
 export default function DeleteAccountScreen() {
   const { colors } = useTheme();

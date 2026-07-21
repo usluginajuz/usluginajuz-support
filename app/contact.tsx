@@ -4,8 +4,8 @@ import { useTheme } from '@/theme/ThemeProvider';
 import { ThemeColors } from '@/theme/colors';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { CONTACT_EMAIL } from '@/utils/supabase';
 
-const CONTACT_EMAIL = 'usluginajuz@gmail.com';
 const CONTACT_PHONE = '+48577544977'; 
 
 export default function ContactScreen() {
@@ -73,6 +73,14 @@ export default function ContactScreen() {
               icon="shield-halved"
               label="Polityka Prywatności"
               href="/privacy-policy"
+              colors={colors}
+              styles={styles}
+            />
+            <View style={styles.infoDivider} />
+            <InfoLink
+              icon="file-contract"
+              label="Regulamin"
+              href="/terms"
               colors={colors}
               styles={styles}
             />
