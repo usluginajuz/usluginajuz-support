@@ -124,7 +124,9 @@ function InfoLink({
       activeOpacity={0.7}
       onPress={() => Linking.openURL(href)}
     >
-      <FontAwesome6 name={icon} size={15} color={colors.primary} />
+      <View style={styles.infoLinkIconWrap}>
+        <FontAwesome6 name={icon} size={15} color={colors.primary} />
+      </View>
       <Text style={styles.infoLinkText}>{label}</Text>
       <FontAwesome6 name="chevron-right" size={12} color={colors.textSecondary} />
     </TouchableOpacity>
@@ -247,6 +249,10 @@ const createStyles = (colors: ThemeColors) =>
     },
     infoLinks: {
       gap: 0,
+    },
+    infoLinkIconWrap: {
+      width: 22,
+      alignItems: 'center',
     },
     infoLinkRow: {
       flexDirection: 'row',
