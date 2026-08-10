@@ -1,0 +1,24 @@
+@import 'tailwindcss';
+
+@theme {
+  /* Brand colors — from the old theme/colors.ts */
+  --color-ink: #1b1b38;
+  --color-accent: #6fa8d0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background-color: #ffffff;
+  color: #111827;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #0a0a14;
+    color: #f9fafb;
+  }
+}
