@@ -2,8 +2,6 @@ User-agent: *
 Allow: /
 Disallow: /reset-password
 Disallow: /verify
+Disallow: /bramka
 
 Sitemap: https://www.timelly.pl/sitemap.xml
-
-User-agent: *
-Disallow: /bramka
