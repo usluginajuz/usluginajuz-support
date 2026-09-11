@@ -101,3 +101,37 @@ podmienia też screeny (`_b` w dark).
 - Nie kasować oryginałów w `../uslugi-na-juz/timelly-demo/`.
 - Stare strony prawne przenieść treściowo 1:1 (bez „ulepszania" treści prawnej).
 - UI po polsku, poprawne diakrytyki.
+
+---
+
+# Runda 2 (2026-09-11): landing pod FIRMY + sekcja branżowa
+
+Uwaga wspólnika: strona ma zachęcać FIRMĘ, nie klienta. Układ: góra uniwersalna
+(pobierz / otwórz apkę), potem wszystko pod firmy, na dole krótkie „dla klientów".
+Bez sekcji cennika. Branże na start: beauty/barber, bilard/rozrywka, restauracje,
+wypożyczalnie (+ kafelek-furtka „Twoja branża? dostosujemy się").
+
+## Reguła ochrony przed konkurencją (wnioski z rozbioru Timsy)
+
+- Pokazujemy EFEKT i PROBLEM, nigdy MECHANIZM. „Klient widzi, który stolik jest
+  wolny, zanim zadzwoni" — tak. Jak liczymy sloty/piny — nie.
+- ZERO wzmianek o bramce SMS / SMS z SIM-a firmy / koszcie 0 zł. Na stronie tylko
+  „automatyczne przypomnienia SMS" jako zwykła cecha, bez screena.
+- Żadnych screenów paneli konfiguracyjnych, ustawień, parowania, edytorów mapy,
+  panelu admina. Tylko ekrany „wynikowe" (kalendarz pełen wizyt, statystyki,
+  widok klienta) — to konkurencja i tak zobaczy po zainstalowaniu apki.
+- Żadnych publicznych wideo-tutoriali panelu (Timsy tak odsłonili cały produkt).
+- Argumenty, które są NASZE i bezpieczne: opinie tylko po odbytej wizycie, dane w
+  UE/RODO, natywna apka firmy na telefon i tablet (Timsy: tylko web), 12 języków
+  dla klientów, spójne statystyki, zero reklam i trackerów w apce.
+- Nie kopiować: „brak DAC7", moderacja opinii przez firmę, obietnice „wkrótce".
+
+## Materiały do dostarczenia (numeracja ciąg dalszy; light + `_b` dark)
+
+Panel firmy: 08-uslugi (phone), 09-pracownicy (phone, +tablet jeśli grafik),
+10-profil-firmy (phone + tablet; wizytówka z opiniami), 12-wydarzenia (phone),
+nagranie-firma(.mov/_b) — kalendarz → dodanie wizyty → statystyki, 12–20 s.
+Branże: 13-restauracja-mapa (phone, +tablet), 14-restauracja-rezerwacja (phone),
+15-wypozyczalnia-oferta (phone), 16-wypozyczalnia-flota (tablet).
+Opcjonalnie: 17-jezyk-en (phone; pierwszy ekran klienta po angielsku).
+Wycofane: 11-sms (bramka nie idzie na stronę).
