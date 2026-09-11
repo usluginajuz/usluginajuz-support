@@ -22,9 +22,9 @@ function ScrollToTop() {
 }
 
 const DEFAULT_META = {
-  title: 'Timelly — rezerwacje online dla Twojej firmy',
+  title: 'Timelly — rezerwuj rozrywkę i usługi',
   description:
-    'Aplikacja do rezerwacji dla każdej firmy, która przyjmuje zapisy — od salonów i restauracji po kluby bilardowe i wypożyczalnie. Kalendarz zespołu, rezerwacje online 24/7, przypomnienia SMS, statystyki — na telefon, tablet i przeglądarkę.',
+    'Timelly — rezerwuj usługi i rozrywkę w sekundę. Znajdź firmę na mapie, wybierz termin i gotowe. Bez dzwonienia.',
 };
 
 // Tytuł i opis per trasa — Google widzi każdą podstronę jako osobną, a nie kopię strony głównej
