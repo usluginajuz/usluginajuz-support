@@ -32,7 +32,7 @@ export default function StoreButtons() {
         href={WEB_APP_URL}
         className="group flex items-center gap-2.5 rounded-full bg-ink px-8 py-3.5 text-[17px] font-semibold text-white shadow-lg shadow-ink/25 transition-transform hover:scale-[1.03] dark:bg-accent dark:text-ink dark:shadow-accent/20"
       >
-        Przejdź do aplikacji
+        Otwórz w przeglądarce
         <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-0.5" />
       </a>
       <div className="flex flex-wrap items-center justify-center gap-3">
