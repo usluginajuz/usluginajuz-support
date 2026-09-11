@@ -1,6 +1,6 @@
-import { Bike, ChevronDown, Dices, Plus, Scissors, UtensilsCrossed } from 'lucide-react';
+import { Bike, Dices, EyeOff, MessageSquareText, Plus, Scissors, ShieldCheck, UtensilsCrossed } from 'lucide-react';
 import { AnimatePresence, motion, useScroll, useTransform } from 'motion/react';
-import { useRef, useState, type ComponentType } from 'react';
+import { useRef, useState, type ComponentType, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { PhoneFrame, TabletFrame, ThemedImage } from '../components/DeviceFrames';
 import Reveal from '../components/Reveal';
@@ -27,8 +27,6 @@ import opinieDark from '../assets/demo/phone-opinie-dark.webp';
 import opinie from '../assets/demo/phone-opinie.webp';
 import pracownicyDark from '../assets/demo/phone-pracownicy-dark.webp';
 import pracownicy from '../assets/demo/phone-pracownicy.webp';
-import rankingDark from '../assets/demo/phone-ranking-dark.webp';
-import ranking from '../assets/demo/phone-ranking.webp';
 import phoneRestauracjaMapaDark from '../assets/demo/phone-restauracja-mapa-dark.webp';
 import phoneRestauracjaMapa from '../assets/demo/phone-restauracja-mapa.webp';
 import restauracjaRezerwacjaDark from '../assets/demo/phone-restauracja-rezerwacja-dark.webp';
@@ -63,10 +61,6 @@ const TABLET_LANDSCAPE_ASPECT = 'aspect-[4/3]';
 
 type Pair = { light: string; dark: string; alt: string };
 type VideoPair = { light: string; dark: string; poster: string; posterDark: string; alt: string };
-type Media =
-  | ({ kind: 'phone' } & Pair)
-  | ({ kind: 'tablet'; landscape?: boolean; phoneFallback?: Pair } & Pair)
-  | ({ kind: 'video' } & VideoPair);
 
 const clientFlowVideo: VideoPair = {
   light: flowMp4,
@@ -95,53 +89,48 @@ function DemoVideo({ video, eager = false }: { video: VideoPair; eager?: boolean
   );
 }
 
-/** One screen in a device frame. Portrait tablets swap to a phone on small screens. */
-function MediaItem({ item, compact = false }: { item: Media; compact?: boolean }) {
-  const phoneW = compact ? 'w-[160px] sm:w-[180px]' : 'w-[200px] sm:w-[230px]';
-  if (item.kind === 'video') {
-    return (
-      <PhoneFrame className={phoneW}>
-        <DemoVideo video={item} />
-      </PhoneFrame>
-    );
-  }
-  if (item.kind === 'phone') {
-    return (
-      <PhoneFrame className={phoneW}>
-        <ThemedImage light={item.light} dark={item.dark} alt={item.alt} className={`w-full ${PHONE_ASPECT}`} />
-      </PhoneFrame>
-    );
-  }
-  if (item.landscape) {
-    return (
-      <TabletFrame className={compact ? 'w-full max-w-md' : 'w-full max-w-2xl'}>
-        <ThemedImage light={item.light} dark={item.dark} alt={item.alt} className={`w-full ${TABLET_LANDSCAPE_ASPECT}`} />
-      </TabletFrame>
-    );
-  }
+function Phone({ img, className = 'w-[220px] sm:w-[250px]' }: { img: Pair; className?: string }) {
+  return (
+    <PhoneFrame className={className}>
+      <ThemedImage light={img.light} dark={img.dark} alt={img.alt} className={`w-full ${PHONE_ASPECT}`} />
+    </PhoneFrame>
+  );
+}
+
+function PhoneVideo({ video }: { video: VideoPair }) {
+  return (
+    <PhoneFrame className="w-[220px] sm:w-[250px]">
+      <DemoVideo video={video} />
+    </PhoneFrame>
+  );
+}
+
+/** Portrait tablet; below `md` it swaps to the matching phone screen. */
+function Tablet({ img, phone, className = 'max-w-md' }: { img: Pair; phone: Pair; className?: string }) {
   return (
     <>
-      <TabletFrame className={`hidden w-full md:block ${compact ? 'max-w-xs' : 'max-w-md'}`}>
-        <ThemedImage light={item.light} dark={item.dark} alt={item.alt} className={`w-full ${TABLET_ASPECT}`} />
+      <TabletFrame className={`hidden w-full md:block ${className}`}>
+        <ThemedImage light={img.light} dark={img.dark} alt={img.alt} className={`w-full ${TABLET_ASPECT}`} />
       </TabletFrame>
-      {item.phoneFallback && (
-        <PhoneFrame className={`${phoneW} md:hidden`}>
-          <ThemedImage
-            light={item.phoneFallback.light}
-            dark={item.phoneFallback.dark}
-            alt={item.phoneFallback.alt}
-            className={`w-full ${PHONE_ASPECT}`}
-          />
-        </PhoneFrame>
-      )}
+      <Phone img={phone} className="w-[220px] sm:w-[250px] md:hidden" />
     </>
   );
 }
 
+function TabletLandscape({ img }: { img: Pair }) {
+  return (
+    <TabletFrame className="w-full max-w-2xl">
+      <ThemedImage light={img.light} dark={img.dark} alt={img.alt} className={`w-full ${TABLET_LANDSCAPE_ASPECT}`} />
+    </TabletFrame>
+  );
+}
+
+/* ---------- layout primitives ---------- */
+
 /** Eyebrow + big headline + lead — shared section intro. */
 function SectionIntro({ eyebrow, title, lead }: { eyebrow: string; title: string; lead: string }) {
   return (
-    <Reveal className="mx-auto mb-14 max-w-3xl text-center">
+    <Reveal className="mx-auto mb-16 max-w-3xl text-center sm:mb-20">
       <p className="mb-3 text-sm font-bold uppercase tracking-[0.18em] text-accent">{eyebrow}</p>
       <h2 className="mb-5 text-4xl font-bold tracking-tight text-ink sm:text-5xl md:text-6xl dark:text-white">
         {title}
@@ -161,6 +150,34 @@ function Bullets({ items }: { items: string[] }) {
         </li>
       ))}
     </ul>
+  );
+}
+
+type RowContent = { step?: string; headline: string; body: string; bullets: string[]; media: ReactNode };
+
+/** One "text | device" row; `flip` puts the device on the left on large screens. */
+function SplitRow({ step, headline, body, bullets, media, flip = false }: RowContent & { flip?: boolean }) {
+  return (
+    <Reveal className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+      <div className={flip ? 'lg:order-2' : ''}>
+        {step && <p className="mb-3 text-sm font-bold tracking-[0.18em] text-accent">{step}</p>}
+        <h3 className="mb-5 text-3xl font-bold tracking-tight text-ink sm:text-4xl dark:text-white">{headline}</h3>
+        <p className="mb-7 max-w-lg text-lg leading-relaxed text-neutral-500 dark:text-neutral-400">{body}</p>
+        <Bullets items={bullets} />
+      </div>
+      <div className={`flex flex-wrap items-end justify-center gap-6 ${flip ? 'lg:order-1' : ''}`}>{media}</div>
+    </Reveal>
+  );
+}
+
+/** Rows alternate text/device sides automatically. */
+function SplitRows({ rows }: { rows: RowContent[] }) {
+  return (
+    <div className="space-y-24 sm:space-y-32">
+      {rows.map((row, i) => (
+        <SplitRow key={row.headline} {...row} flip={i % 2 === 1} />
+      ))}
+    </div>
   );
 }
 
@@ -198,9 +215,9 @@ function Hero() {
           {...enter(0.12)}
           className="mb-10 max-w-2xl text-lg leading-relaxed text-neutral-500 sm:text-xl dark:text-neutral-400"
         >
-          Timelly to aplikacja do rezerwacji dla salonów, klubów bilardowych, restauracji i
-          wypożyczalni. Kalendarz zespołu, rezerwacje online przez całą dobę, przypomnienia SMS i
-          statystyki — na telefonie, tablecie i w przeglądarce.
+          Timelly to aplikacja do rezerwacji dla każdej firmy, która przyjmuje zapisy — od salonów
+          i restauracji po kluby bilardowe i wypożyczalnie. Kalendarz zespołu, rezerwacje online
+          przez całą dobę, przypomnienia SMS i statystyki: na telefonie, tablecie i w przeglądarce.
         </motion.p>
 
         <motion.div {...enter(0.24)}>
@@ -242,10 +259,7 @@ type Industry = {
   icon: ComponentType<{ className?: string }>;
   name: string;
   tagline: string;
-  headline: string;
-  body: string;
-  bullets: string[];
-  media: Media[];
+  rows: RowContent[];
 };
 
 const industries: Industry[] = [
@@ -254,24 +268,49 @@ const industries: Industry[] = [
     icon: Scissors,
     name: 'Beauty i barber',
     tagline: 'salony, barberzy, kosmetyka',
-    headline: 'Fotel nie stoi pusty.',
-    body:
-      'Telefon dzwoni w trakcie strzyżenia, a klient, który się nie dodzwonił, idzie do konkurencji. W Timelly klient sam widzi wolne godziny każdego barbera i rezerwuje o 23:00, kiedy Ty już śpisz. Rano masz pełny grafik i wiesz, kto do kogo przychodzi.',
-    bullets: [
-      'Grafik każdego pracownika osobno, cała ekipa w jednym widoku',
-      'Klient wybiera konkretnego barbera albo pierwszego wolnego',
-      'Opinie wystawiają tylko ci, którzy naprawdę byli — ocena 5.0 znaczy 5.0',
-    ],
-    media: [
+    rows: [
       {
-        kind: 'tablet',
-        light: tabletProfilFirmy,
-        dark: tabletProfilFirmyDark,
-        alt: 'Profil barbershopu na tablecie: usługi, kalendarz i stanowiska na żywo',
-        phoneFallback: { light: rezerwacja, dark: rezerwacjaDark, alt: 'Profil barbershopu: wybór usługi i terminu' },
+        headline: 'Fotel nie stoi pusty.',
+        body:
+          'Telefon dzwoni w trakcie strzyżenia, a klient, który się nie dodzwonił, idzie do konkurencji. W Timelly klient sam widzi wolne godziny każdego barbera i rezerwuje o 23:00, kiedy Ty już śpisz. Rano masz pełny grafik i wiesz, kto do kogo przychodzi.',
+        bullets: [
+          'Grafik każdego pracownika osobno, cała ekipa w jednym widoku',
+          'Klient wybiera konkretnego barbera albo pierwszego wolnego',
+          'Klient widzi, które stanowisko jest wolne w tej chwili',
+        ],
+        media: (
+          <Tablet
+            img={{
+              light: tabletProfilFirmy,
+              dark: tabletProfilFirmyDark,
+              alt: 'Profil barbershopu na tablecie: usługi, kalendarz i stanowiska na żywo',
+            }}
+            phone={{ light: rezerwacja, dark: rezerwacjaDark, alt: 'Profil barbershopu: wybór usługi i terminu' }}
+          />
+        ),
       },
-      { kind: 'video', ...clientFlowVideo },
-      { kind: 'phone', light: opinie, dark: opinieDark, alt: 'Opinie klientów — ocena 5.0, tylko po odbytej wizycie' },
+      {
+        headline: 'Rezerwacja w minutę, bez rozmowy.',
+        body:
+          'Klient otwiera Twój profil, wybiera usługę, barbera i godzinę, potwierdza. Cała rezerwacja trwa około minuty — i od razu widzisz ją w kalendarzu, z nazwiskiem i numerem telefonu.',
+        bullets: [
+          'Usługa, pracownik, godzina — trzy dotknięcia',
+          'Wizyta od razu w Twoim kalendarzu',
+          'Klient dostaje potwierdzenie i przypomnienie SMS',
+        ],
+        media: <PhoneVideo video={clientFlowVideo} />,
+      },
+      {
+        headline: 'Ocena 5.0 znaczy 5.0.',
+        body:
+          'Opinię może wystawić tylko klient, który był na wizycie. Nie ma kupionych gwiazdek ani opinii od kogoś, kto nigdy nie przekroczył progu salonu. Twoja ocena to Twoja robota.',
+        bullets: [
+          'Opinia dopiero po odbytej wizycie',
+          'Przy każdej opinii widać, jakiej usługi dotyczy',
+          'Ocena i liczba opinii na Twojej wizytówce',
+        ],
+        media: <Phone img={{ light: opinie, dark: opinieDark, alt: 'Opinie klientów — ocena 5.0, tylko po odbytej wizycie' }} />,
+      },
     ],
   },
   {
@@ -279,46 +318,68 @@ const industries: Industry[] = [
     icon: Dices,
     name: 'Bilard i rozrywka',
     tagline: 'kluby bilardowe, dart, kręgle',
-    headline: 'Klient widzi wolny stół, zanim zadzwoni.',
-    body:
-      'Piątek, 20:00, sześć stołów i telefon, który nie przestaje dzwonić: „macie coś wolnego?". W Timelly klient sam patrzy na plan sali i widzi, który stół jest wolny o której godzinie. Rezerwuje stół numer 3 na godzinę albo bierze dowolny wolny — bez dzwonienia i bez pomyłek przy barze.',
-    bullets: [
-      'Plan sali z numerami stołów — klient rezerwuje konkretny stół',
-      'Rezerwacja na czas: godzina lub dłużej, cena według Twojego cennika',
-      'Wolne terminy pojawiają się zaraz po zwolnieniu stołu, nie od pełnej godziny',
+    rows: [
+      {
+        headline: 'Klient widzi wolny stół, zanim zadzwoni.',
+        body:
+          'Piątek, 20:00, sześć stołów i telefon, który nie przestaje dzwonić: „macie coś wolnego?". W Timelly klient sam patrzy na plan sali i widzi, który stół jest wolny o której godzinie. Rezerwuje stół numer 3 na godzinę albo bierze dowolny wolny — bez dzwonienia i bez pomyłek przy barze.',
+        bullets: [
+          'Plan sali z numerami stołów — klient rezerwuje konkretny stół',
+          'Rezerwacja na czas: godzina lub dłużej, cena według Twojego cennika',
+          'Wolne terminy pojawiają się zaraz po zwolnieniu stołu, nie od pełnej godziny',
+        ],
+        media: <Phone img={{ light: bilard, dark: bilardDark, alt: 'Plan sali bilardowej z wyborem stołu i godziny' }} />,
+      },
     ],
-    media: [{ kind: 'phone', light: bilard, dark: bilardDark, alt: 'Plan sali bilardowej z wyborem stołu i godziny' }],
   },
   {
     id: 'restauracja',
     icon: UtensilsCrossed,
     name: 'Restauracje',
     tagline: 'restauracje, ogródki, kawiarnie',
-    headline: 'Stolik dla trzech osób o 17:30. Bez telefonu.',
-    body:
-      'Gość wybiera stolik na planie Twojej sali albo ogródka — tak jak wybiera fotel w kinie. Podaje liczbę osób, dostaje potwierdzenie, a Ty widzisz w kalendarzu, kto siada gdzie i o której. Kelner nie musi odbierać telefonu z tacą w ręku.',
-    bullets: [
-      'Plan sali i ogródka — gość widzi, gdzie usiądzie, zanim przyjdzie',
-      'Liczba osób i godzina — stolik na dwie godziny jest zajęty tylko na dwie godziny',
-      'Zajęty stolik znika z planu dla innych — koniec podwójnych rezerwacji',
-    ],
-    media: [
+    rows: [
       {
-        kind: 'tablet',
-        light: tabletRestauracjaMapa,
-        dark: tabletRestauracjaMapaDark,
-        alt: 'Plan ogródka restauracji z wyborem stolika na tablecie',
-        phoneFallback: {
-          light: phoneRestauracjaMapa,
-          dark: phoneRestauracjaMapaDark,
-          alt: 'Plan ogródka restauracji z wyborem stolika',
-        },
+        headline: 'Stolik dla trzech osób o 17:30. Bez telefonu.',
+        body:
+          'Gość wybiera stolik na planie Twojej sali albo ogródka — tak jak wybiera fotel w kinie. Widzi, które stoliki są wolne o wybranej godzinie, i bierze ten przy oknie albo ten w ogródku. Kelner nie musi odbierać telefonu z tacą w ręku.',
+        bullets: [
+          'Plan sali i ogródka — gość widzi, gdzie usiądzie, zanim przyjdzie',
+          'Wolne stoliki podświetlone, zajęte znikają z wyboru',
+          'Sala i ogródek osobno, stoliki na 2, 4 i więcej osób',
+        ],
+        media: (
+          <Tablet
+            img={{
+              light: tabletRestauracjaMapa,
+              dark: tabletRestauracjaMapaDark,
+              alt: 'Plan ogródka restauracji z wyborem stolika na tablecie',
+            }}
+            phone={{
+              light: phoneRestauracjaMapa,
+              dark: phoneRestauracjaMapaDark,
+              alt: 'Plan ogródka restauracji z wyborem stolika',
+            }}
+          />
+        ),
       },
       {
-        kind: 'phone',
-        light: restauracjaRezerwacja,
-        dark: restauracjaRezerwacjaDark,
-        alt: 'Potwierdzona rezerwacja stolika dla 3 osób w aplikacji klienta',
+        headline: 'Potwierdzone. Gość wie, że stolik czeka.',
+        body:
+          'Gość widzi w aplikacji, który stolik ma, na ile osób i na którą godzinę. Ty widzisz to samo w kalendarzu — kto siada gdzie i o której. Nikt nie zapisuje tego w zeszycie przy barze.',
+        bullets: [
+          'Liczba osób i czas — stolik na dwie godziny jest zajęty tylko na dwie godziny',
+          'Status „Potwierdzona" bez telefonu zwrotnego',
+          'Gość dodaje rezerwację do swojego kalendarza jednym dotknięciem',
+        ],
+        media: (
+          <Phone
+            img={{
+              light: restauracjaRezerwacja,
+              dark: restauracjaRezerwacjaDark,
+              alt: 'Potwierdzona rezerwacja stolika dla 3 osób w aplikacji klienta',
+            }}
+          />
+        ),
       },
     ],
   },
@@ -327,34 +388,55 @@ const industries: Industry[] = [
     icon: Bike,
     name: 'Wypożyczalnie',
     tagline: 'motocykle, rowery, sprzęt',
-    headline: 'Cała flota w jednym grafiku.',
-    body:
-      'Klient wybiera motocykl oraz termin odbioru i zwrotu — cena za sześć dób liczy się sama. Ty widzisz tydzień całej floty na jednym ekranie: który pojazd jest w trasie, który wraca w piątek i co można jeszcze wydać. Umowa najmu, zaliczka i dodatki są w szczegółach wynajmu, gotowe do wydruku.',
-    bullets: [
-      'Termin od–do z godziną odbioru i zwrotu, cena za doby liczona automatycznie',
-      'Grafik floty: każdy pojazd w osobnym wierszu, kategorie osobno',
-      'Umowa najmu do wydruku, dodatki i zaliczka w jednym rozliczeniu',
-    ],
-    media: [
+    rows: [
       {
-        kind: 'tablet',
-        landscape: true,
-        light: tabletFlota,
-        dark: tabletFlotaDark,
-        alt: 'Tygodniowy grafik floty wypożyczalni motocykli na tablecie',
+        headline: 'Cała flota w jednym grafiku.',
+        body:
+          'Tydzień całej floty na jednym ekranie: który motocykl jest w trasie, który wraca w piątek i co jeszcze można wydać. Kategorie osobno, każdy pojazd w swoim wierszu — bez tablicy z karteczkami.',
+        bullets: [
+          'Każdy pojazd w osobnym wierszu, kategorie osobno',
+          'Odbiory, zwroty i wolne dni widoczne na tydzień do przodu',
+          'Wynajmy dodane ręcznie i te z aplikacji klienta w jednym widoku',
+        ],
+        media: (
+          <TabletLandscape
+            img={{ light: tabletFlota, dark: tabletFlotaDark, alt: 'Tygodniowy grafik floty wypożyczalni motocykli na tablecie' }}
+          />
+        ),
       },
       {
-        kind: 'phone',
-        light: wypozyczalniaOferta,
-        dark: wypozyczalniaOfertaDark,
-        alt: 'Wybór terminu wynajmu Yamahy XTZ700 — 6 dób, 2100 zł',
+        headline: 'Klient wybiera termin, cena liczy się sama.',
+        body:
+          'Klient zaznacza dzień i godzinę odbioru oraz zwrotu. Sześć dób Yamahy XTZ700 — 2100 zł — widzi od razu, zanim potwierdzi. Zajęte dni są niedostępne, więc nie dostaniesz rezerwacji na motocykl, który jest w trasie.',
+        bullets: [
+          'Termin od–do z godziną odbioru i zwrotu',
+          'Cena za doby liczona automatycznie według Twojego cennika',
+          'Zajęte dni od razu niedostępne w kalendarzu',
+        ],
+        media: (
+          <Phone
+            img={{
+              light: wypozyczalniaOferta,
+              dark: wypozyczalniaOfertaDark,
+              alt: 'Wybór terminu wynajmu Yamahy XTZ700 — 6 dób, 2100 zł',
+            }}
+          />
+        ),
       },
       {
-        kind: 'tablet',
-        landscape: true,
-        light: tabletUmowa,
-        dark: tabletUmowaDark,
-        alt: 'Szczegóły wynajmu: klient, terminy, umowa do wydruku i rozliczenie',
+        headline: 'Umowa, zaliczka, dodatki — w jednym miejscu.',
+        body:
+          'Szczegóły wynajmu to komplet: klient z numerem telefonu, pojazd, odbiór i zwrot z dokładną godziną, kask i rękawice, zaliczka. Umowa najmu do wydruku jednym dotknięciem, bez przepisywania danych.',
+        bullets: [
+          'Umowa najmu do wydruku z danymi wpisanymi raz',
+          'Dodatki i zaliczka w jednym rozliczeniu',
+          'Odbiór i zwrot z dokładną godziną',
+        ],
+        media: (
+          <TabletLandscape
+            img={{ light: tabletUmowa, dark: tabletUmowaDark, alt: 'Szczegóły wynajmu: klient, terminy, umowa do wydruku i rozliczenie' }}
+          />
+        ),
       },
     ],
   },
@@ -405,7 +487,7 @@ function ForWhom() {
         <SectionIntro
           eyebrow="Dla kogo"
           title="Zrobione pod Twoją branżę."
-          lead="Inny biznes, inne problemy. Wybierz swój i zobacz, jak Timelly wygląda u Ciebie."
+          lead="Fotel, stół, stolik, motocykl — inny biznes, inne problemy. Wybierz swoją branżę albo najbliższą i zobacz, jak Timelly wygląda u Ciebie."
         />
 
         <Reveal className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
@@ -428,7 +510,7 @@ function ForWhom() {
           />
         </Reveal>
 
-        <div className="mt-12 min-h-[420px]">
+        <div className="mt-16 min-h-[420px] sm:mt-20">
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={activeId}
@@ -438,22 +520,7 @@ function ForWhom() {
               transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
             >
               {active ? (
-                <div className="grid items-center gap-12 lg:grid-cols-[2fr_3fr]">
-                  <div>
-                    <h3 className="mb-5 text-3xl font-bold tracking-tight text-ink sm:text-4xl dark:text-white">
-                      {active.headline}
-                    </h3>
-                    <p className="mb-7 text-lg leading-relaxed text-neutral-500 dark:text-neutral-400">
-                      {active.body}
-                    </p>
-                    <Bullets items={active.bullets} />
-                  </div>
-                  <div className="flex flex-wrap items-center justify-center gap-6">
-                    {active.media.map((m) => (
-                      <MediaItem key={m.alt} item={m} />
-                    ))}
-                  </div>
-                </div>
+                <SplitRows rows={active.rows} />
               ) : (
                 <div className="mx-auto max-w-2xl text-center">
                   <h3 className="mb-5 text-3xl font-bold tracking-tight text-ink sm:text-4xl dark:text-white">
@@ -482,138 +549,104 @@ function ForWhom() {
 
 /* ---------- 3. Funkcje ---------- */
 
-type Feature = { title: string; words: [string, string, string]; detail: string; media?: Media[] };
+const kalendarzPhone: Pair = { light: phoneKalendarz, dark: phoneKalendarzDark, alt: 'Kalendarz firmy z kolumnami pracowników' };
+const kalendarzTablet: Pair = { light: tabletKalendarz, dark: tabletKalendarzDark, alt: 'Kalendarz firmy na tablecie' };
 
-const features: Feature[] = [
+const featureRows: RowContent[] = [
   {
-    title: 'Rezerwacje online 24/7',
-    words: ['Klient rezerwuje sam', 'O każdej porze', 'Od razu w kalendarzu'],
-    detail:
+    headline: 'Rezerwacje online, całą dobę.',
+    body:
       'Wolne terminy są zawsze aktualne. Klient wybiera usługę, pracownika i godzinę, a wizyta pojawia się w Twoim kalendarzu w tej samej sekundzie. Wizytę możesz też dodać ręcznie — z telefonu, w trakcie rozmowy z klientem.',
-    media: [{ kind: 'phone', light: rezerwacja, dark: rezerwacjaDark, alt: 'Rezerwacja usługi w aplikacji klienta' }],
+    bullets: [
+      'Klient rezerwuje sam, o każdej porze',
+      'Wizyta w Twoim kalendarzu w tej samej sekundzie',
+      'Ręczne dodawanie wizyty z telefonu, gdy ktoś jednak zadzwoni',
+    ],
+    media: <Phone img={{ light: rezerwacja, dark: rezerwacjaDark, alt: 'Rezerwacja usługi w aplikacji klienta' }} />,
   },
   {
-    title: 'Kalendarz zespołu',
-    words: ['Cały zespół', 'Jeden widok', 'Zero kolizji'],
-    detail:
+    headline: 'Cały zespół w jednym widoku.',
+    body:
       'Każdy pracownik ma własną kolumnę, a Ty widzisz dzień albo tydzień całej firmy. Wizyty od klientów i te dodane ręcznie różnią się kolorem, więc od razu wiesz, skąd przyszła.',
-    media: [
-      { kind: 'phone', light: phoneKalendarz, dark: phoneKalendarzDark, alt: 'Kalendarz firmy z kolumnami pracowników' },
-      { kind: 'phone', light: pracownicy, dark: pracownicyDark, alt: 'Lista pracowników firmy' },
+    bullets: [
+      'Własna kolumna dla każdego pracownika',
+      'Dzień albo tydzień całej firmy na jednym ekranie',
+      'Wizyty klientów i ręczne różnią się kolorem',
     ],
+    media: (
+      <>
+        <Tablet img={kalendarzTablet} phone={kalendarzPhone} className="max-w-xs" />
+        <Phone
+          img={{ light: pracownicy, dark: pracownicyDark, alt: 'Lista pracowników firmy' }}
+          className="w-[150px] sm:w-[170px]"
+        />
+      </>
+    ),
   },
   {
-    title: 'Statystyki',
-    words: ['Przychody', 'Liczba wizyt', 'Średnia wartość'],
-    detail:
-      'Ile zarobiła firma w tym roku, ile w tym miesiącu i ile średnio na wizytę. Dla całej firmy albo dla jednego pracownika — bez arkusza w Excelu.',
-    media: [
-      {
-        kind: 'tablet',
-        light: tabletStatystyki,
-        dark: tabletStatystykiDark,
-        alt: 'Statystyki przychodów firmy na tablecie',
-        phoneFallback: { light: phoneStatystyki, dark: phoneStatystykiDark, alt: 'Statystyki przychodów firmy' },
-      },
-    ],
+    headline: 'Liczby bez arkusza.',
+    body:
+      'Ile zarobiła firma w tym roku, ile w tym miesiącu i ile średnio na wizytę. Dla całej firmy albo dla jednego pracownika — bez przepisywania do Excela.',
+    bullets: ['Przychód w roku i w miesiącu', 'Liczba wizyt i średnia wartość wizyty', 'Cała firma albo jeden pracownik'],
+    media: (
+      <Tablet
+        img={{ light: tabletStatystyki, dark: tabletStatystykiDark, alt: 'Statystyki przychodów firmy na tablecie' }}
+        phone={{ light: phoneStatystyki, dark: phoneStatystykiDark, alt: 'Statystyki przychodów firmy' }}
+      />
+    ),
   },
   {
-    title: 'Wizytówka i opinie',
-    words: ['Tylko po wizycie', 'Bez kupionych gwiazdek', 'Usługi i galeria'],
-    detail:
+    headline: 'Wizytówka z opiniami, którym można wierzyć.',
+    body:
       'Profil firmy z usługami, cenami, galerią i mapą. Opinię może wystawić tylko klient, który był na wizycie — ocena jest Twoja, nie kogoś, kto nigdy u Ciebie nie był.',
-    media: [{ kind: 'phone', light: opinie, dark: opinieDark, alt: 'Opinie klientów — tylko po odbytej wizycie' }],
+    bullets: ['Usługi, ceny, galeria i mapa w jednym profilu', 'Opinia tylko po odbytej wizycie', 'Bez kupionych gwiazdek'],
+    media: <Phone img={{ light: opinie, dark: opinieDark, alt: 'Opinie klientów — tylko po odbytej wizycie' }} />,
   },
   {
-    title: 'Przypomnienia SMS',
-    words: ['Mniej nieodebranych', 'Automatycznie', 'Bez Twojej pracy'],
-    detail: 'Klient dostaje SMS z przypomnieniem przed wizytą, a Ty nie musisz o tym pamiętać.',
+    headline: 'Klient z zagranicy czyta po swojemu.',
+    body:
+      'Klient z Niemiec, Ukrainy czy Anglii widzi Twoje usługi w swoim języku — nazwy, opisy, godziny. Ty nic nie tłumaczysz; wpisujesz wszystko po polsku.',
+    bullets: ['12 języków, przełączane automatycznie', 'Nazwy usług i opisy tłumaczone bez Twojego udziału', 'Ty piszesz tylko po polsku'],
+    media: <Phone img={{ light: jezykEn, dark: jezykEnDark, alt: 'Profil firmy po angielsku w aplikacji klienta' }} />,
   },
   {
-    title: '12 języków',
-    words: ['Bez tłumacza', 'Automatycznie', 'Klient z zagranicy'],
-    detail:
-      'Klient z Niemiec, Ukrainy czy Anglii widzi Twoje usługi po swojemu — nazwy, opisy, godziny. Ty nic nie tłumaczysz; wpisujesz po polsku.',
-    media: [{ kind: 'phone', light: jezykEn, dark: jezykEnDark, alt: 'Profil firmy po angielsku w aplikacji klienta' }],
-  },
-  {
-    title: 'Dane w UE',
-    words: ['Serwery w UE', 'RODO', 'Twoi klienci, Twoje dane'],
-    detail:
-      'Dane firmy i klientów są przechowywane na serwerach w Unii Europejskiej, zgodnie z RODO. Nie sprzedajemy ich i nie profilujemy klientów pod reklamy.',
-  },
-  {
-    title: 'Zero reklam i trackerów',
-    words: ['Bez reklam', 'Bez śledzenia', 'Bez konkurencji obok'],
-    detail:
-      'W aplikacji nie ma reklam ani trackerów. Klient, który otwiera Twój profil, widzi Twój profil — nie reklamę salonu z sąsiedniej ulicy.',
-  },
-  {
-    title: 'Aplikacja natywna',
-    words: ['Telefon', 'Tablet', 'Przeglądarka'],
-    detail:
-      "Timelly to prawdziwa aplikacja na iPhone'a, Androida i iPada, nie tylko strona w przeglądarce. Kalendarz na tablecie przy recepcji, powiadomienia na telefonie w kieszeni — i to samo w przeglądarce na komputerze.",
-    media: [
-      {
-        kind: 'tablet',
-        light: tabletKalendarz,
-        dark: tabletKalendarzDark,
-        alt: 'Kalendarz firmy na tablecie',
-      },
-      { kind: 'phone', light: phoneKalendarz, dark: phoneKalendarzDark, alt: 'Kalendarz firmy na telefonie' },
-    ],
+    headline: 'Prawdziwa aplikacja, nie strona.',
+    body:
+      "Timelly działa jako aplikacja na iPhone'a, Androida i iPada — i tak samo w przeglądarce na komputerze. Kalendarz na tablecie przy recepcji, powiadomienia na telefonie w kieszeni, ten sam widok wszędzie.",
+    bullets: ['Telefon: iPhone i Android', 'Tablet przy recepcji', 'Przeglądarka na komputerze'],
+    media: (
+      <>
+        <TabletFrame className="w-full max-w-[200px] md:max-w-xs">
+          <ThemedImage
+            light={kalendarzTablet.light}
+            dark={kalendarzTablet.dark}
+            alt={kalendarzTablet.alt}
+            className={`w-full ${TABLET_ASPECT}`}
+          />
+        </TabletFrame>
+        <Phone img={kalendarzPhone} className="w-[130px] md:w-[170px]" />
+      </>
+    ),
   },
 ];
 
-function FeatureCard({ feature }: { feature: Feature }) {
-  const [open, setOpen] = useState(false);
-  return (
-    <div className="rounded-3xl border border-black/10 bg-white p-6 dark:border-white/10 dark:bg-white/5">
-      <h3 className="text-xl font-bold tracking-tight text-ink dark:text-white">{feature.title}</h3>
-      <div className="mt-3 flex flex-wrap gap-2">
-        {feature.words.map((w) => (
-          <span
-            key={w}
-            className="rounded-full bg-neutral-100 px-2.5 py-1 text-xs font-medium text-neutral-600 dark:bg-white/10 dark:text-neutral-300"
-          >
-            {w}
-          </span>
-        ))}
-      </div>
-      <button
-        type="button"
-        onClick={() => setOpen((o) => !o)}
-        aria-expanded={open}
-        className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-accent"
-      >
-        {open ? 'Zwiń' : 'Rozwiń'}
-        <ChevronDown className={`h-4 w-4 transition-transform ${open ? 'rotate-180' : ''}`} />
-      </button>
-      <AnimatePresence initial={false}>
-        {open && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-            className="overflow-hidden"
-          >
-            <p className="pt-4 text-[15px] leading-relaxed text-neutral-600 dark:text-neutral-300">
-              {feature.detail}
-            </p>
-            {feature.media && (
-              <div className="mt-5 flex flex-wrap items-center justify-center gap-4">
-                {feature.media.map((m) => (
-                  <MediaItem key={m.alt} item={m} compact />
-                ))}
-              </div>
-            )}
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-}
+const quietFeatures = [
+  {
+    icon: MessageSquareText,
+    title: 'Przypomnienia SMS',
+    text: 'Klient dostaje SMS przed wizytą, a Ty nie musisz o tym pamiętać.',
+  },
+  {
+    icon: ShieldCheck,
+    title: 'Dane w UE, zgodnie z RODO',
+    text: 'Dane firmy i klientów są na serwerach w Unii Europejskiej. Nie sprzedajemy ich i nie profilujemy klientów pod reklamy.',
+  },
+  {
+    icon: EyeOff,
+    title: 'Zero reklam i trackerów',
+    text: 'Klient, który otwiera Twój profil, widzi Twój profil — nie reklamę salonu z sąsiedniej ulicy.',
+  },
+];
 
 function Features() {
   return (
@@ -624,13 +657,17 @@ function Features() {
           title="Wszystko, czego potrzebuje firma."
           lead="Krótko — szczegóły zobaczysz w aplikacji."
         />
-        <div className="grid items-start gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {features.map((f, i) => (
-            <Reveal key={f.title} delay={(i % 3) * 0.08}>
-              <FeatureCard feature={f} />
-            </Reveal>
+        <SplitRows rows={featureRows} />
+
+        <Reveal className="mt-24 grid gap-6 sm:mt-32 sm:grid-cols-3">
+          {quietFeatures.map(({ icon: Icon, title, text }) => (
+            <div key={title} className="rounded-3xl border border-black/10 bg-white p-6 dark:border-white/10 dark:bg-white/5">
+              <Icon className="mb-4 h-7 w-7 text-accent" />
+              <h3 className="mb-2 text-xl font-bold tracking-tight text-ink dark:text-white">{title}</h3>
+              <p className="text-[15px] leading-relaxed text-neutral-600 dark:text-neutral-300">{text}</p>
+            </div>
           ))}
-        </div>
+        </Reveal>
 
         {/* Events teaser — deliberately no details and no screen (premiere end of September 2026) */}
         <Reveal className="mt-6 flex flex-col items-start gap-3 rounded-3xl border border-dashed border-black/15 bg-neutral-50 p-6 sm:flex-row sm:items-center sm:gap-6 dark:border-white/15 dark:bg-white/[0.03]">
@@ -653,30 +690,33 @@ function Features() {
 
 /* ---------- 4. Tak widzą Cię klienci ---------- */
 
-const clientSteps = [
+const clientRows: RowContent[] = [
   {
-    step: '01',
-    title: 'Znajdź',
-    desc: 'Twoja firma na mapie, obok oceny i wolnych terminów.',
-    light: mapaFirm,
-    dark: mapaFirmDark,
-    alt: 'Mapa firm w aplikacji klienta',
+    step: '01 · Znajdź',
+    headline: 'Klient znajduje Cię na mapie.',
+    body:
+      'Twoja firma na mapie okolicy, z wizytówką, oceną i wolnymi terminami. Ktoś, kto szuka barbera w Białymstoku, widzi Ciebie na mapie — nie listę ogłoszeń.',
+    bullets: ['Firmy w okolicy klienta na mapie', 'Wizytówka: usługi, ceny, ocena', 'Rezerwacja prosto z profilu'],
+    media: <Phone img={{ light: mapaFirm, dark: mapaFirmDark, alt: 'Mapa firm w aplikacji klienta' }} />,
   },
   {
-    step: '02',
-    title: 'Zarezerwuj',
-    desc: 'Usługa, pracownik, godzina. Klient klika, Ty widzisz wizytę.',
-    light: rezerwacja,
-    dark: rezerwacjaDark,
-    alt: 'Rezerwacja usługi w aplikacji klienta',
+    step: '02 · Zarezerwuj',
+    headline: 'Usługa, pracownik, godzina.',
+    body: 'Klient klika, Ty widzisz wizytę. Bez telefonu, bez „oddzwonię za chwilę", bez pomyłki w zeszycie.',
+    bullets: [
+      'Wolne terminy zawsze aktualne',
+      'Konkretny pracownik albo pierwszy wolny',
+      'Potwierdzenie od razu w aplikacji klienta',
+    ],
+    media: <Phone img={{ light: rezerwacja, dark: rezerwacjaDark, alt: 'Rezerwacja usługi w aplikacji klienta' }} />,
   },
   {
-    step: '03',
-    title: 'Przyjdź',
-    desc: 'Szczegóły wizyty z mapą i nawigacją. Klient trafia na czas.',
-    light: szczegoly,
-    dark: szczegolyDark,
-    alt: 'Szczegóły wizyty z mapą i nawigacją',
+    step: '03 · Przyjdź',
+    headline: 'Klient trafia na czas.',
+    body:
+      'Szczegóły wizyty z mapą i nawigacją do Twojego lokalu, przypomnienie SMS przed terminem. Mniej spóźnień, mniej nieodebranych wizyt.',
+    bullets: ['Mapa i nawigacja do Twojego lokalu', 'Przypomnienie SMS przed wizytą', 'Wizyta w kalendarzu telefonu klienta'],
+    media: <Phone img={{ light: szczegoly, dark: szczegolyDark, alt: 'Szczegóły wizyty z mapą i nawigacją' }} />,
   },
 ];
 
@@ -689,62 +729,7 @@ function ClientsView() {
           title="Tak widzą Cię klienci."
           lead="Mapa, rezerwacja, nawigacja. Trzy ekrany, jedna minuta."
         />
-        <div className="grid gap-10 sm:grid-cols-3 sm:gap-6 lg:gap-10">
-          {clientSteps.map((s, i) => (
-            <Reveal key={s.step} delay={i * 0.12} className="flex flex-col items-center">
-              <PhoneFrame className="w-[210px] lg:w-[240px]">
-                <ThemedImage light={s.light} dark={s.dark} alt={s.alt} className={`w-full ${PHONE_ASPECT}`} />
-              </PhoneFrame>
-              <p className="mt-6 text-sm font-bold tracking-[0.18em] text-accent">{s.step}</p>
-              <h3 className="mt-1 text-2xl font-bold tracking-tight text-ink dark:text-white">{s.title}</h3>
-              <p className="mt-2 max-w-[280px] text-center text-[15px] leading-relaxed text-neutral-500 dark:text-neutral-400">
-                {s.desc}
-              </p>
-            </Reveal>
-          ))}
-        </div>
-
-        <div className="mt-24 grid items-center gap-14 lg:grid-cols-2">
-          <Reveal>
-            <h3 className="mb-5 text-3xl font-bold tracking-tight text-ink sm:text-4xl dark:text-white">
-              Klienci wracają.
-            </h3>
-            <p className="mb-7 max-w-lg text-lg leading-relaxed text-neutral-500 dark:text-neutral-400">
-              Każda odbyta wizyta to punkty w miesięcznym rankingu — od Brązu po Diament. Klient ma
-              powód, żeby wrócić do Ciebie, a nie do tego, kto akurat ma promocję.
-            </p>
-            <Bullets
-              items={[
-                'Punkty naliczają się same, po odbytej wizycie',
-                'Cała rezerwacja na telefonie klienta trwa około minuty',
-                'Prywatność w rankingu: klient sam decyduje, czy jest widoczny',
-              ]}
-            />
-          </Reveal>
-          <Reveal delay={0.15} className="flex flex-wrap items-center justify-center gap-6">
-            <PhoneFrame className="w-[200px] sm:w-[230px]">
-              <DemoVideo video={clientFlowVideo} />
-            </PhoneFrame>
-            <PhoneFrame className="w-[200px] sm:w-[230px]">
-              <ThemedImage
-                light={ranking}
-                dark={rankingDark}
-                alt="Ranking punktów lojalnościowych"
-                className={`w-full ${PHONE_ASPECT}`}
-              />
-            </PhoneFrame>
-          </Reveal>
-        </div>
-
-        <Reveal className="mt-24 flex flex-col items-center gap-6 rounded-3xl border border-black/10 bg-white p-8 text-center sm:p-10 dark:border-white/10 dark:bg-white/5">
-          <div>
-            <h3 className="mb-2 text-2xl font-bold tracking-tight text-ink dark:text-white">Jesteś klientem?</h3>
-            <p className="text-[15px] text-neutral-500 dark:text-neutral-400">
-              Pobierz Timelly i rezerwuj w firmach, które już w niej są.
-            </p>
-          </div>
-          <StoreButtons />
-        </Reveal>
+        <SplitRows rows={clientRows} />
       </div>
     </section>
   );
@@ -765,6 +750,9 @@ function BusinessCta() {
           klientom link. Pierwsze rezerwacje mogą wpaść jeszcze dziś.
         </p>
         <StoreButtons />
+        <p className="mt-8 text-sm text-neutral-500 dark:text-neutral-400">
+          Jesteś klientem? Te same przyciski — pobierz aplikację i rezerwuj.
+        </p>
       </Reveal>
     </section>
   );
