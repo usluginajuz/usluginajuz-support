@@ -126,12 +126,41 @@ wypożyczalnie (+ kafelek-furtka „Twoja branża? dostosujemy się").
   dla klientów, spójne statystyki, zero reklam i trackerów w apce.
 - Nie kopiować: „brak DAC7", moderacja opinii przez firmę, obietnice „wkrótce".
 
-## Materiały do dostarczenia (numeracja ciąg dalszy; light + `_b` dark)
+## Materiały — stan finalny (2026-09-11), źródło `../uslugi-na-juz/timelly-demo/`
 
-Panel firmy: 08-uslugi (phone), 09-pracownicy (phone, +tablet jeśli grafik),
-10-profil-firmy (phone + tablet; wizytówka z opiniami), 12-wydarzenia (phone),
-nagranie-firma(.mov/_b) — kalendarz → dodanie wizyty → statystyki, 12–20 s.
-Branże: 13-restauracja-mapa (phone, +tablet), 14-restauracja-rezerwacja (phone),
-15-wypozyczalnia-oferta (phone), 16-wypozyczalnia-flota (tablet).
-Opcjonalnie: 17-jezyk-en (phone; pierwszy ekran klienta po angielsku).
-Wycofane: 11-sms (bramka nie idzie na stronę).
+Wszystko light + `_b` dark. Telefon 1320×2868, tablet 2064×2752 (16 i 18: 2752×2064 landscape).
+
+Telefon (`phone/`): 01-kalendarz, 02-statystyki, 03-rezerwacja, 04-mapa-firm, 05-szczegoly-wizyty,
+06-ranking, 07-bilard, 08-uslugi, 09-pracownicy, 10-opinie (nagłówek 5.0 + „Aby wystawić opinię,
+musisz najpierw skorzystać z usług tej firmy" — to nasz argument), 13-restauracja-mapa (ogród,
+stoliki P/S/L), 14-restauracja-rezerwacja (widok klienta: stolik, 3 osoby, Potwierdzona),
+15-wypozyczalnia-oferta (Yamaha XTZ700, 6 dób, 2100 zł), 17-jezyk-en (profil Nova po angielsku —
+„tłumaczenie bez Twojego udziału", 12 języków).
+Tablet (`tablet/`): 01-kalendarz, 02-statystyki, 03-rezerwacja, 04-mapa-firm, 05-szczegoly-wizyty,
+06-ranking, 10-profil-firmy (wrześniowa wersja 03), 13-restauracja-mapa (najmocniejszy materiał),
+16-wypozyczalnia-flota (tydzień floty, landscape), 18-wypozyczalnia-umowa (szczegóły wynajmu,
+„Drukuj umowę", rozliczenie, landscape).
+Wideo (`phone/`): `nagranie.mov`/`_b` (klient: flow rezerwacji z mapą LIVE, ~17 s, z rundy 1),
+`nagranie-firma-final.mov`/`_b` (FIRMA, ~26 s, już przycięte i przyspieszone — użyć TEGO, nie
+`nagranie-firma.mov`): kalendarz dnia → pracownicy → tydzień → Dodaj wizytę → usługa → mapa
+z licznikami → slot → klient po numerze → podsumowanie → modal „Limit wizyt przekroczony" →
+Umów mimo to → „Wizyta umówiona" → nowa wizyta w luce kalendarza. Modal limitu jest CELOWO
+(pokazuje, że firma może przejść limit) — nie wycinać. Tablet: `nagranie.mov`/`_b` (klient).
+Nie ma: 11-sms (bramka nie idzie na stronę), 12-wydarzenia (premiera pod koniec września).
+
+## Układ landingu — runda 2 (zdecydowane z userem)
+
+1. Hero uniwersalne: claim dla firm + od razu przyciski Pobierz (App Store / Google Play) i
+   „Otwórz w przeglądarce" (app.timelly.pl) — działa dla każdego, kto wejdzie. Wideo: nagranie-firma-final.
+2. „Dla kogo" — 4 kafelki branż + kafelek-furtka „Twoja branża? Dostosujemy się": Beauty/barber,
+   Bilard/rozrywka, Restauracje, Wypożyczalnie. Klik przełącza panel pod spodem: screeny + copy pod
+   branżę (beauty: 01/03/10 + nagranie klienta; bilard: 07 + live; restauracja: 13 tablet + 14;
+   wypożyczalnia: 15 + 16 + 18). Copy = efekt i problem, nigdy mechanizm.
+3. „Funkcje" — kafelki „nagłówek + 3 słowa korzyści + Rozwiń" (wzór podpatrzony u konkurencji):
+   rezerwacje 24/7, kalendarz zespołu (01/09), statystyki (02), wizytówka i opinie tylko po wizycie
+   (10), przypomnienia SMS (bez screena, jedno zdanie), 12 języków (17), dane w UE / RODO, zero reklam
+   i trackerów w apce, apka natywna na telefon i tablet (konkurent: tylko web).
+4. „Tak widzą Cię klienci" — krótko: 04 → 03 → 05 + nagranie klienta; lojalność (06) jako
+   „klienci wracają". Na dole mały blok „Jesteś klientem? Pobierz apkę".
+5. CTA + footer (bez linku do bramki — zostaje ukryta; nie przywracać).
+Bez cennika. Wydarzenia — nic, dopóki nie wystartują.
