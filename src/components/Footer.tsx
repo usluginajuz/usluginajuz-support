@@ -5,7 +5,6 @@ const links = [
   { to: '/terms', label: 'Regulamin' },
   { to: '/privacy-policy', label: 'Polityka Prywatności' },
   { to: '/delete-account', label: 'Usuń konto' },
-  { to: '/bramka', label: 'Timelly Bramka' },
 ];
 
 export default function Footer() {

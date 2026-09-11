@@ -30,9 +30,9 @@ const DEFAULT_META = {
 // Tytuł i opis per trasa — Google widzi każdą podstronę jako osobną, a nie kopię strony głównej
 const ROUTE_META: Record<string, { title: string; description: string }> = {
   '/bramka': {
-    title: 'Timelly Bramka — SMS-y do klientów z Twojego numeru',
+    title: 'Timelly Bramka — aplikacja pomocnicza dla firm',
     description:
-      'Aplikacja na firmowy telefon z Androidem. SMS-y do klientów wychodzą z Twojego numeru, a numer dzwoniącego podpowiada się przy umawianiu wizyty.',
+      'Aplikacja pomocnicza na firmowy telefon z Androidem dla firm korzystających z Timelly. Instalacja i parowanie z kontem firmowym.',
   },
   '/contact': {
     title: 'Kontakt — Timelly',
@@ -60,6 +60,18 @@ function RouteMeta() {
     const meta = ROUTE_META[pathname] ?? DEFAULT_META;
     document.title = meta.title;
     document.querySelector('meta[name="description"]')?.setAttribute('content', meta.description);
+    // /bramka: strona tylko do dystrybucji APK dla wdrożonych firm — poza indeksem Google
+    let robots = document.querySelector('meta[name="robots"]');
+    if (pathname === '/bramka') {
+      if (!robots) {
+        robots = document.createElement('meta');
+        robots.setAttribute('name', 'robots');
+        document.head.appendChild(robots);
+      }
+      robots.setAttribute('content', 'noindex');
+    } else {
+      robots?.remove();
+    }
   }, [pathname]);
   return null;
 }

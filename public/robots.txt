@@ -4,3 +4,6 @@ Disallow: /reset-password
 Disallow: /verify
 
 Sitemap: https://www.timelly.pl/sitemap.xml
+
+User-agent: *
+Disallow: /bramka

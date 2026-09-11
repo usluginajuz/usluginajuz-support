@@ -59,7 +59,7 @@ export default function Bramka() {
       <PageHero
         icon={RadioTower}
         title="Timelly Bramka"
-        subtitle="Aplikacja na firmowy telefon z Androidem. SMS-y do Twoich klientów wychodzą z Twojego numeru, więc mogą po prostu oddzwonić albo odpisać. Gdy klient dzwoni, jego numer od razu podpowiada się przy umawianiu wizyty."
+        subtitle="Aplikacja pomocnicza na firmowy telefon z Androidem — dla firm korzystających z Timelly. Zainstaluj ją i sparuj z kontem firmowym według poniższych kroków."
       />
 
       {/* ── Download ── */}
