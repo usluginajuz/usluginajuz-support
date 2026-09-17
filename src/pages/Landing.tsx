@@ -1,6 +1,7 @@
 import { motion, useScroll, useTransform } from 'motion/react';
 import { useRef } from 'react';
 import { PhoneFrame, TabletFrame, ThemedImage } from '../components/DeviceFrames';
+import FirmLeadForm from '../components/FirmLeadForm';
 import Reveal from '../components/Reveal';
 import StoreButtons from '../components/StoreButtons';
 import { usePrefersDark } from '../hooks/usePrefersDark';
@@ -306,6 +307,23 @@ function ForBusiness() {
   );
 }
 
+function JoinAsFirm() {
+  return (
+    <section className="bg-neutral-50 px-5 py-24 sm:py-32 dark:bg-white/[0.03]">
+      <Reveal className="mx-auto flex max-w-3xl flex-col items-center text-center">
+        <p className="mb-3 text-sm font-bold uppercase tracking-[0.18em] text-accent">Dla firm</p>
+        <h2 className="mb-5 text-4xl font-bold tracking-tight text-ink sm:text-5xl dark:text-white">
+          Chcesz dołączyć do Timelly jako firma?
+        </h2>
+        <p className="mb-8 max-w-xl text-lg leading-relaxed text-neutral-500 sm:text-xl dark:text-neutral-400">
+          Zostaw numer — oddzwonimy, pokażemy aplikację i pomożemy ustawić wszystko pod Twój biznes.
+        </p>
+        <FirmLeadForm />
+      </Reveal>
+    </section>
+  );
+}
+
 function DownloadCta() {
   return (
     <section className="relative overflow-hidden px-5 py-28 sm:py-36">
@@ -331,6 +349,7 @@ export default function Landing() {
       <ForClients />
       <LiveSection />
       <ForBusiness />
+      <JoinAsFirm />
       <DownloadCta />
     </>
   );
