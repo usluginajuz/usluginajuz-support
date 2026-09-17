@@ -108,6 +108,19 @@ function Hero() {
         </motion.div>
 
         <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          className="mt-8 flex w-full max-w-2xl flex-col items-center gap-4 rounded-3xl border border-black/5 bg-white/70 px-6 py-6 backdrop-blur dark:border-white/10 dark:bg-white/5"
+        >
+          <p className="text-[15px] text-neutral-600 dark:text-neutral-300">
+            <span className="font-bold text-ink dark:text-white">Masz firmę?</span> Zostaw numer —
+            oddzwonimy i pokażemy, jak Timelly działa u Ciebie.
+          </p>
+          <FirmLeadForm />
+        </motion.div>
+
+        <motion.div
           style={{ y: phoneY, scale: phoneScale }}
           initial={{ opacity: 0, y: 60 }}
           animate={{ opacity: 1, y: 0 }}
@@ -307,34 +320,24 @@ function ForBusiness() {
   );
 }
 
-function JoinAsFirm() {
-  return (
-    <section className="bg-neutral-50 px-5 py-24 sm:py-32 dark:bg-white/[0.03]">
-      <Reveal className="mx-auto flex max-w-3xl flex-col items-center text-center">
-        <p className="mb-3 text-sm font-bold uppercase tracking-[0.18em] text-accent">Dla firm</p>
-        <h2 className="mb-5 text-4xl font-bold tracking-tight text-ink sm:text-5xl dark:text-white">
-          Chcesz dołączyć do Timelly jako firma?
-        </h2>
-        <p className="mb-8 max-w-xl text-lg leading-relaxed text-neutral-500 sm:text-xl dark:text-neutral-400">
-          Zostaw numer — oddzwonimy, pokażemy aplikację i pomożemy ustawić wszystko pod Twój biznes.
-        </p>
-        <FirmLeadForm />
-      </Reveal>
-    </section>
-  );
-}
-
 function DownloadCta() {
   return (
     <section className="relative overflow-hidden px-5 py-28 sm:py-36">
       <div className="pointer-events-none absolute bottom-[-200px] left-1/2 h-[420px] w-[720px] -translate-x-1/2 rounded-full bg-accent/20 blur-3xl" />
       <Reveal className="relative mx-auto flex max-w-3xl flex-col items-center text-center">
+        <p className="mb-3 text-sm font-bold uppercase tracking-[0.18em] text-accent">Dla firm</p>
         <h2 className="mb-5 text-4xl font-bold tracking-tight text-ink sm:text-6xl dark:text-white">
-          Zacznij dziś.
+          Chcesz dołączyć do Timelly?
         </h2>
-        <p className="mb-10 max-w-xl text-lg leading-relaxed text-neutral-500 sm:text-xl dark:text-neutral-400">
-          Timelly jest bezpłatne — dla klientów i dla firm. Pobierz aplikację albo korzystaj z
-          przeglądarki.
+        <p className="mb-8 max-w-xl text-lg leading-relaxed text-neutral-500 sm:text-xl dark:text-neutral-400">
+          Zostaw numer — oddzwonimy, pokażemy aplikację i pomożemy ustawić wszystko pod Twój
+          biznes.
+        </p>
+        <FirmLeadForm />
+        <div className="my-14 h-px w-24 bg-black/10 dark:bg-white/15" />
+        <p className="mb-8 max-w-xl text-lg leading-relaxed text-neutral-500 sm:text-xl dark:text-neutral-400">
+          Timelly jest obecnie bezpłatne — dla klientów i dla firm. Pobierz aplikację albo
+          korzystaj z przeglądarki.
         </p>
         <StoreButtons />
       </Reveal>
@@ -349,7 +352,6 @@ export default function Landing() {
       <ForClients />
       <LiveSection />
       <ForBusiness />
-      <JoinAsFirm />
       <DownloadCta />
     </>
   );
