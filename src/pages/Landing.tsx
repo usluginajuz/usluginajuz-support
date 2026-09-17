@@ -336,8 +336,8 @@ function DownloadCta() {
         <FirmLeadForm />
         <div className="my-14 h-px w-24 bg-black/10 dark:bg-white/15" />
         <p className="mb-8 max-w-xl text-lg leading-relaxed text-neutral-500 sm:text-xl dark:text-neutral-400">
-          Timelly jest obecnie bezpłatne — dla klientów i dla firm. Pobierz aplikację albo
-          korzystaj z przeglądarki.
+          Timelly jest obecnie bezpłatne dla firm. Załóż profil w aplikacji albo w przeglądarce
+          i zacznij przyjmować rezerwacje.
         </p>
         <StoreButtons />
       </Reveal>
