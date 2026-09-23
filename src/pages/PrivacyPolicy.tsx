@@ -1,6 +1,7 @@
 import {
   Baby,
   Cookie,
+  Megaphone,
   Database,
   Headphones,
   Hourglass,
@@ -27,7 +28,7 @@ import {
 } from '../components/legal';
 import { CONTACT_EMAIL } from '../lib/constants';
 
-const LAST_UPDATED = '1 lipca 2026';
+const LAST_UPDATED = '24 września 2026';
 
 function EmailLink() {
   return (
@@ -53,15 +54,24 @@ export default function PrivacyPolicy() {
       <Card>
         <CardHeader icon={UserRoundCheck} title="1. Administrator danych" />
         <Para>
-          Administratorem danych osobowych przetwarzanych w aplikacji Timelly jest Stanisław
-          Kryński (dalej: „Administrator").
+          Administratorem danych osobowych związanych z Twoim kontem w aplikacji Timelly jest
+          Stanisław Kryński (dalej: „Administrator" lub „Timelly").
         </Para>
         <Para>
           Kontakt z Administratorem: <EmailLink />
         </Para>
+        <Subheading>Kiedy administratorem jest firma</Subheading>
+        <Bullets
+          muted
+          items={[
+            'Gdy rezerwujesz wizytę, firma otrzymuje Twoje dane potrzebne do jej obsługi (m.in. imię i numer telefonu). Od tej chwili firma przetwarza je we własnych celach jako odrębny administrator — np. do wykonania usługi, rozliczeń i prowadzenia historii wizyt. Dotyczy to także zgody marketingowej, której udzielasz firmie.',
+            'Dane, które firma wprowadza i prowadzi w swoim panelu — np. klienci dodani ręcznie (bez konta), notatki, historia wizyt, wysyłka powiadomień i wiadomości marketingowych — przetwarza firma jako administrator, a Timelly robi to w jej imieniu jako podmiot przetwarzający, na podstawie umowy powierzenia (Załącznik nr 1 do Regulaminu).',
+            'W sprawach danych, których administratorem jest firma, możesz zwrócić się bezpośrednio do firmy (dane kontaktowe znajdziesz na jej profilu) albo do nas — przekażemy żądanie firmie.',
+          ]}
+        />
         <Para muted>
-          Aplikacja Timelly nie jest powiązana z zarejestrowaną działalnością gospodarczą. Usługa
-          jest bezpłatna i nie pobiera żadnych opłat od użytkowników.
+          Aplikacja Timelly nie jest powiązana z zarejestrowaną działalnością gospodarczą.
+          Korzystanie z niej jest bezpłatne.
         </Para>
       </Card>
 
@@ -109,6 +119,7 @@ export default function PrivacyPolicy() {
             'Licznik uruchomień aplikacji (w celu wykrywania nieaktywnych kont)',
             'Tokeny push notification (do wysyłania powiadomień)',
             'Zapisy nieudanych prób logowania (np. blokady PIN) — w celach bezpieczeństwa',
+            'Raporty błędów aplikacji: opis błędu, model i system urządzenia, wersja aplikacji, identyfikator konta oraz — tylko dla sesji, w której wystąpił błąd — zapis przebiegu ekranu z zamaskowanymi tekstami i obrazami',
           ]}
         />
 
@@ -144,6 +155,7 @@ export default function PrivacyPolicy() {
         <Bullets
           items={[
             'Rejestr akceptacji dokumentów (regulamin, polityka prywatności): typ dokumentu, wersja, data, platforma oraz wersja aplikacji — jako dowód spełnienia obowiązków prawnych',
+            'Zgody marketingowe udzielone poszczególnym firmom: firma, odpowiedź (zgoda albo odmowa) i jej późniejsze wycofanie, wersja treści zgody, data, sposób (w aplikacji albo przez link z SMS-a), platforma oraz wersja aplikacji, a przy odpowiedzi przez link także adres IP i typ przeglądarki — jako dowód udzielenia lub wycofania zgody',
           ]}
         />
       </Card>
@@ -174,8 +186,16 @@ export default function PrivacyPolicy() {
               desc: 'Odpowiadanie na zapytania, obsługa wiadomości z formularza kontaktu, wniosków o założenie profilu firmy oraz wniosków o usunięcie konta — na podstawie prawnie uzasadnionego interesu (art. 6 ust. 1 lit. f RODO).',
             },
             {
+              title: 'Wykrywanie i naprawa błędów',
+              desc: 'Zbieranie raportów błędów aplikacji w celu ich naprawy — na podstawie prawnie uzasadnionego interesu Administratora (art. 6 ust. 1 lit. f RODO).',
+            },
+            {
               title: 'Dokumentowanie zgód',
               desc: 'Przechowywanie rejestru akceptacji regulaminu i polityki prywatności (kto, którą wersję i kiedy zaakceptował) — w celu wykazania zgodności, na podstawie obowiązku prawnego oraz prawnie uzasadnionego interesu (art. 6 ust. 1 lit. c i f RODO).',
+            },
+            {
+              title: 'Marketing firm (tylko za Twoją zgodą)',
+              desc: 'Wysyłka informacji handlowych przez firmę, której udzieliłeś zgody marketingowej. Administratorem jest firma, a Timelly przetwarza dane w jej imieniu. Szczegóły w sekcji „Wiadomości marketingowe od firm".',
             },
           ]}
         />
@@ -185,22 +205,26 @@ export default function PrivacyPolicy() {
       <Card>
         <CardHeader icon={Share2} title="4. Komu udostępniamy dane" />
         <Para>
-          Dane osobowe nie są sprzedawane ani udostępniane podmiotom trzecim w celach
-          marketingowych. Dostęp do danych mają wyłącznie:
+          Nie sprzedajemy danych osobowych i nie wysyłamy własnych wiadomości marketingowych.
+          Dostęp do danych mają:
         </Para>
         <Bullets
           muted
           items={[
+            'Firmy, w których rezerwujesz — jako odrębni administratorzy (sekcja 1): nazwa użytkownika, numer telefonu, dane rezerwacji oraz informacja, czy udzieliłeś im zgody marketingowej.',
             'Supabase Inc. — dostawca infrastruktury (baza danych, uwierzytelnianie, przechowywanie plików). Dane przechowywane na serwerach AWS w regionie Unii Europejskiej.',
-            'Google LLC — Google Maps SDK wykorzystywane do wyświetlania map i lokalizacji firm.',
-            'Dostawca usług SMS — do wysyłania powiadomień SMS o rezerwacjach.',
+            'Operator bramki SMS (SMSPlanet) — do wysyłania wiadomości SMS.',
             'Expo (EAS) — do dostarczania powiadomień push na urządzenia mobilne.',
+            'Functional Software, Inc. (Sentry) — raportowanie błędów aplikacji; dane przechowywane w regionie Unii Europejskiej (Niemcy).',
+            'Google LLC — Google Maps SDK wykorzystywane do wyświetlania map i lokalizacji firm.',
+            'DeepL SE — tłumaczenie treści publikowanych przez firmy (np. opisów usług) na inne języki; nie przekazujemy do tłumaczenia danych klientów.',
           ]}
         />
         <NoteBox>
-          Firmy korzystające z Timelly widzą dane klientów, którzy dokonali u nich rezerwacji:
-          nazwę użytkownika oraz numer telefonu (jeśli podany). Klienci widzą dane publiczne firmy:
-          nazwę, adres, usługi, godziny pracy i zdjęcia.
+          Jeśli firma korzysta z aplikacji Timelly Bramka, wiadomości SMS do Ciebie (przypomnienia
+          o wizycie i — za Twoją zgodą — wiadomości marketingowe) wysyła telefon firmy z jej
+          numeru. Klienci widzą dane publiczne firmy: nazwę, adres, usługi, godziny pracy i
+          zdjęcia.
         </NoteBox>
       </Card>
 
@@ -215,7 +239,7 @@ export default function PrivacyPolicy() {
         <Para muted>
           Korzystanie z Google Maps SDK oraz usług push notification może wiązać się z
           przekazywaniem ograniczonych danych technicznych (np. współrzędnych, tokenów urządzenia)
-          do serwerów Google i Expo zlokalizowanych poza UE, zgodnie z ich politykami prywatności i
+          do serwerów Google, Expo i Sentry zlokalizowanych poza UE, zgodnie z ich politykami prywatności i
           odpowiednimi mechanizmami transferu danych.
         </Para>
       </Card>
@@ -227,7 +251,11 @@ export default function PrivacyPolicy() {
           muted
           items={[
             'Dane konta — przez cały okres korzystania z usługi, do momentu usunięcia konta.',
-            'Dane rezerwacji — przez okres trwania konta. Po usunięciu konta rezerwacje są anulowane i usuwane.',
+            'Dane rezerwacji — po usunięciu konta rezerwacje pozostają u firmy bez powiązania z Twoim kontem, na potrzeby rozliczeń firmy i ewentualnych roszczeń; ich dalsze przechowywanie należy do firmy jako administratora.',
+            'Opinie — po usunięciu konta pozostają opublikowane jako anonimowe, bez powiązania z Twoim kontem.',
+            'Rejestr akceptacji dokumentów i zgód marketingowych — po usunięciu konta pozostaje jako wpis bez powiązania z kontem, na potrzeby wykazania zgodności (art. 17 ust. 3 lit. b i e RODO), nie dłużej niż do upływu okresu przedawnienia roszczeń.',
+            'Zgoda marketingowa — do jej wycofania albo do usunięcia konta firmy.',
+            'Raporty błędów — do 90 dni.',
             'Zdjęcia — usuwane wraz z kontem lub firmą.',
             'Dane techniczne (logi, kopie zapasowe) — przechowywane tymczasowo zgodnie z cyklem retencji dostawcy (zwykle do 30 dni).',
             'Dane wymagane prawem — przechowywane tak długo, jak wymaga tego obowiązujące prawo.',
@@ -264,6 +292,10 @@ export default function PrivacyPolicy() {
             {
               title: 'Prawo sprzeciwu',
               desc: 'Możesz sprzeciwić się przetwarzaniu danych opartemu na prawnie uzasadnionym interesie.',
+            },
+            {
+              title: 'Prawo do wycofania zgody',
+              desc: 'Zgodę (np. marketingową dla firmy lub na tryb pełny w rankingu) możesz wycofać w każdej chwili, bez wpływu na zgodność z prawem przetwarzania przed jej wycofaniem.',
             },
             {
               title: 'Prawo do skargi',
@@ -307,9 +339,9 @@ export default function PrivacyPolicy() {
       <Card>
         <CardHeader icon={Baby} title="10. Dzieci" />
         <Para>
-          Aplikacja Timelly nie jest przeznaczona dla osób poniżej 16. roku życia. Nie zbieramy
-          świadomie danych od dzieci. Jeśli stwierdzimy, że zostały zebrane dane osoby poniżej 16.
-          roku życia, zostaną one niezwłocznie usunięte.
+          Z aplikacji Timelly mogą korzystać wyłącznie osoby pełnoletnie. Nie zbieramy świadomie
+          danych osób niepełnoletnich. Jeśli stwierdzimy, że konto założyła osoba poniżej 18. roku
+          życia, zostanie ono niezwłocznie usunięte.
         </Para>
       </Card>
 
@@ -388,9 +420,30 @@ export default function PrivacyPolicy() {
         </NoteBox>
       </Card>
 
-      {/* ── 13. Kontakt ── */}
+      {/* ── 13. Marketing firm ── */}
+      <Card id="marketing">
+        <CardHeader icon={Megaphone} title="13. Wiadomości marketingowe od firm" />
+        <Para>
+          Firma może wysyłać Ci oferty (np. SMS-y o wolnych terminach i promocjach) wyłącznie
+          wtedy, gdy udzielisz zgody właśnie tej firmie. Zgoda jest osobna dla każdej firmy —
+          zgoda dla jednej nie obejmuje innych. Zgoda jest przypisana do Twojego numeru telefonu w tej firmie: jeśli masz konto, a firma dopisała Cię też ręcznie pod tym samym numerem, jest to jedna zgoda i jedno wypisanie.
+        </Para>
+        <Bullets
+          muted
+          items={[
+            'Jeśli firma włączyła wysyłanie ofert, pytamy o zgodę w jej imieniu przy pierwszej rezerwacji u niej od tego momentu, przed jej potwierdzeniem. „Tak" i „Nie" są równorzędne, a odpowiedź nie wpływa na rezerwację. Nie pytamy ponownie.',
+            'Jeśli nie masz konta, link do udzielenia zgody może być dołączony do SMS-a o Twojej wizycie w tej firmie — nigdy w osobnej wiadomości. Link jest jednorazowy, dotyczy jednej firmy i wygasa; nie wysyłamy go ponownie. Zgoda powstaje tylko wtedy, gdy sam ją potwierdzisz. Pracownik firmy nie może zaznaczyć zgody za Ciebie.',
+            'Podstawa prawna: Twoja zgoda na otrzymywanie informacji handlowych (art. 398 ustawy — Prawo komunikacji elektronicznej) oraz prawnie uzasadniony interes firmy w marketingu bezpośrednim (art. 6 ust. 1 lit. f RODO). Administratorem jest firma; Timelly wysyła wiadomości w jej imieniu.',
+            'Zgodę wycofasz w każdej chwili: na profilu firmy w aplikacji albo klikając link w każdej wiadomości marketingowej. Wycofanie działa od razu, także dla wiadomości oczekujących na wysłanie. Odpowiedź „STOP" na SMS-a nie wycofuje zgody.',
+            'Firma może wysyłać wiadomości automatycznie, gdy z historii Twoich wizyt w tej firmie wynika, że zbliża się pora kolejnej (np. z wolnymi terminami u osoby, u której zwykle bywasz). Korzystamy tylko z historii wizyt w tej jednej firmie. Możesz się temu sprzeciwić, wycofując zgodę.',
+            'Powiadomienia o Twoich rezerwacjach (potwierdzenia, przypomnienia, zmiany) nie są marketingiem i nie wymagają tej zgody.',
+          ]}
+        />
+      </Card>
+
+      {/* ── 14. Kontakt ── */}
       <Card>
-        <CardHeader icon={Headphones} title="13. Kontakt" />
+        <CardHeader icon={Headphones} title="14. Kontakt" />
         <Para>W sprawach związanych z ochroną danych osobowych skontaktuj się z Administratorem:</Para>
         <div className="mt-2 flex items-center gap-3 rounded-xl border border-black/10 bg-white px-4 py-3 dark:border-white/15 dark:bg-white/5">
           <span className="min-w-[90px] text-[13px] font-semibold text-neutral-500 dark:text-neutral-400">
