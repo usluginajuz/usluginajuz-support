@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom';
 import { Card, CardHeader, PageHero, PageShell } from '../components/legal';
 import { CONTACT_EMAIL } from '../lib/constants';
 
-const CONTACT_PHONE = '+48577544977';
+const CONTACT_PHONE = '+48577554977';
 
 function ContactCard({
   icon: Icon,

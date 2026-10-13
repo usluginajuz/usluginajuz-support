@@ -61,5 +61,5 @@ This site is the **public-facing landing page** for the Timelly app:
 - **TypeScript**: Strict mode. Path alias `@/` maps to project root.
 - **Icons**: FontAwesome6 via `@expo/vector-icons`.
 - **Styling**: Inline `StyleSheet.create()` — no external CSS framework.
-- **Contact info**: Email `usluginajuz@gmail.com`, phone `+48577544977` (hardcoded in `contact.tsx`).
+- **Contact info**: Email `usluginajuz@gmail.com`, phone `+48577554977` (hardcoded in `contact.tsx`).
 - **Domain**: Registered on home.pl.
