@@ -4,6 +4,12 @@
   "devCommand": "vite",
   "cleanUrls": true,
   "framework": null,
+  "headers": [
+    {
+      "source": "/downloads/bramka-version.json",
+      "headers": [{ "key": "Access-Control-Allow-Origin", "value": "*" }]
+    }
+  ],
   "rewrites": [
     {
       "source": "/:path*",
